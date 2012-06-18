@@ -1,0 +1,47 @@
+div#wpdz-metabox-sidebars .inside,
+div#wpdz-metabox-dropzones .inside {
+    padding-left:0;
+    padding-right: 0px;
+}
+
+
+div#wpdz-metabox-sidebars .wrap,
+div#wpdz-metabox-dropzones .wrap{
+    margin-right:0px;
+}
+
+div#wpdz-metabox-sidebars div.sidebar-name,
+div#wpdz-metabox-dropzones div.sidebar-name{
+    height: 29px;
+}
+
+div#wpdz-metabox-sidebars div#widgets-left,
+div#wpdz-metabox-dropzones div#widgets-left{
+    margin-right: 294px;
+}
+
+div#wpdz-metabox-sidebars div#widgets-left #available-widgets,
+div#wpdz-metabox-dropzones div#widgets-left #available-widgets {
+/*    margin-top:0px;*/
+}
+
+
+div#wpdz-metabox-sidebars div#widgets-left .widget,
+div#wpdz-metabox-dropzones div#widgets-left .widget {
+    width:224px;
+    margin: 0 5px 16px;
+}
+
+div#wpdz-metabox-sidebars div#widgets-right .widget,
+div#wpdz-metabox-dropzones div#widgets-right .widget{
+    width: 250px;
+}
+
+div#wpdz-metabox-dropzones div.widget-liquid-right {
+    float:none;
+    width:280px
+}
+
+div#wpdz-metabox-dropzones div#widgets-right {
+    width: 275px;
+}
