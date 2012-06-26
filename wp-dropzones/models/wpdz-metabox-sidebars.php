@@ -35,11 +35,12 @@ class WPDZ_Metabox_Sidebars extends WPDZ_Metabox {
     /**
      * @var array 
      */
-    var $callback_args = array('callback' => "sidebars");
+    var $callback_args = array('metabox' => 'sidebars');
     
     /**
      * @var string
      */
     var $view = 'wpdz-metabox-sidebars';
     
+    var $enabled_option_key = 'wpdz-metabox-sidebars_enabled';
 }

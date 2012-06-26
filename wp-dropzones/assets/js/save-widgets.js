@@ -74,7 +74,7 @@ var wmbWidgets;
                 if ( $('p.widget-error', this).length )
                     $('a.widget-action', this).click();
             });
-
+            $('body').live('mouseover', function(){
             $('#widget-list').children('.widget').draggable({
                 connectToSortable: 'div.widgets-sortables',
                 handle: '> .widget-top > .widget-title',
@@ -93,6 +93,7 @@ var wmbWidgets;
                     rem = '';
                 }
             });
+        
 
             sidebars.sortable({
                 placeholder: 'widget-placeholder',
@@ -186,6 +187,7 @@ var wmbWidgets;
                     $('#removing-widget').hide().children('span').html('');
                 }
             });
+            });
         },
 
         saveOrder : function(sb) {
@@ -209,12 +211,14 @@ var wmbWidgets;
             });
 
             this.resize();
+            //wmbWidgets.refreshMetabox();
+            
         },
 
         save : function(widget, del, animate, order) {
              
             //widget = '<form action="" method="post">' + widget + '</div>';
-            $('.widget-control, input, widget-control-actions', widget).wrap('<form />');
+            $('.widget-inside > *', widget).wrapAll('<form action="" method="post" />');
      
             var sb = widget.closest('div.widgets-sortables').attr('id'), data = widget.find('form').serialize(), a;
             //$('<form action="" method="post>').replaceAll('.widget-inside' , widget);
@@ -227,14 +231,14 @@ var wmbWidgets;
                 action: 'save-widget',
                 savewidgets: $('#_wpnonce_widgets').val(),
                 sidebar: sb,
-                id_base: $('.id_base', widget).val(),
-                widget_number: $('.widget_number', widget).val(),
-                multi_number: $('.multi_number', widget).val(),
-                post_id : $('#post_ID').val(),
-    
-                'widget-id' : $('.widget-id', widget).val(),
-                'widget-height' : $('.widget-height', widget).val(),
-                'widget-width' : $('.widget-width', widget).val()
+
+                post_id: $('#post_ID').val()
+//                id_base: $('.id_base', widget).val(),
+//                widget_number: $('.widget_number', widget).val(),
+//                multi_number: $('.multi_number', widget).val(),
+//                'widget-id' : $('.widget-id', widget).val(),
+//                'widget-height' : $('.widget-height', widget).val(),
+//                'widget-width' : $('.widget-width', widget).val()
                 
             };
             // console.log(a);
@@ -290,13 +294,25 @@ var wmbWidgets;
             $.post( ajaxurl, data, function(r){
                 widget_saved(r);
                 $.post( ajaxurl, data2, function(t){
-                    console.log(t)
+                    //console.log(t)
                 });
                     
             });
               
         },
-
+        refreshMetabox: function(){
+            
+            var object = {
+                action: 'refresh-metabox',
+                post: $('#post_ID').val()
+            }
+            
+            $.post(ajaxurl, object, function(r){
+                $('#wpdz-metabox-sidebars .inside .wrap').replaceWith(r);
+                console.log(r);
+            });
+            wmbWidgets.init();
+        },
         appendTitle : function(widget) {
             //console.log(widget);
             var title = $('input[id*="-title"]', widget).val() || '';
@@ -345,3 +361,5 @@ var wmbWidgets;
     });
 
 })(jQuery);
+    
+    

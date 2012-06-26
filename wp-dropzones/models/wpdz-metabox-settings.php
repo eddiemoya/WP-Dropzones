@@ -46,5 +46,15 @@ class WPDZ_Metabox_Settings extends WPDZ_Metabox {
      *
      * @var type 
      */
-    var $option_keys = array('wpdz_widgets_enabled', 'wpdz_dropzone_manager_enabled');
+    var $options = array(
+        'wpdz-metabox-sidebars_enabled' => array(
+            'enable' => 'Enable Widget Editor for this post.',
+            'enable_help' => 'Post bust be saved for changes to take effect'
+        ),
+        'wpdz-metabox-dropzones_enabled' => array(
+            'enable' => 'Enable Layout Manager for this post',
+            'enable_help' => 'Requires that the Widget Editor be enabled.'
+        ),
+    );
+
 }

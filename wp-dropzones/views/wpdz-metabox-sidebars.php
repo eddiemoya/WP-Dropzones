@@ -1,6 +1,6 @@
 <div class="wrap">
-    <?php $callback = $this->callback_args['callback']; ?>
-    <?php if($callback != 'dropzones'){ ?>
+    <?php $metabox = $this->callback_args['metabox']; ?>
+    <?php if($metabox != 'layout-manager'){ ?>
     <div class="widget-liquid-left">
         <div id="widgets-left">
             <div id="available-widgets" class="widgets-holder-wrap">
@@ -31,7 +31,7 @@
     <?php } ?>
     <div class="widget-liquid-right">
         <div id="widgets-right">
-            <?php WPDZ_Controller_Sidebars::$callback(); ?>
+            <?php WPDZ_Controller_Sidebars::view($metabox); ?>
         </div>
     </div>
 

@@ -8,24 +8,26 @@ Author: Eddie Moya
 Author URL: http://eddiemoya.com
 */
 
-define(WPDZ_PATH, WP_PLUGIN_DIR . '/wp-dropzones/');
-
-/* A static class with helpful methods */
-include WPDZ_PATH . 'singletons/wpdz-helper.php';
-
-WPDZ_Helper::include_controller('wpdz-controller-core');
-WPDZ_Helper::include_controller('wpdz-controller-metaboxes');
-WPDZ_Helper::include_controller('wpdz-controller-sidebars');
-WPDZ_Helper::include_model('wpdz-metabox');
-WPDZ_Helper::include_model('wpdz-metabox-settings');
-WPDZ_Helper::include_model('wpdz-metabox-sidebars');
-WPDZ_Helper::include_model('wpdz-metabox-dropzones');
-WPDZ_Helper::include_model('wpdz-sidebar');
+define(WPDZ_PATH, plugin_dir_path(__FILE__));
+define(WPDZ_ASSETS, WPDZ_PATH . 'assets/');
+define(WPDZ_CONTROLLERS, WPDZ_PATH . 'controllers/');
+define(WPDZ_VIEWS, WPDZ_PATH . 'views/');
+define(WPDZ_MODELS, WPDZ_PATH . 'models/');
+define(WPDZ_WIDGETS, WPDZ_MODELS . 'widgets/');
 
 
-/**
- * @see /classes/wp-dropzone.php
- */
+include (WPDZ_WIDGETS . 'dropzone-widget/dropzone-widget.php');
+include (WPDZ_CONTROLLERS . 'wpdz-controller-core.php');
+include (WPDZ_CONTROLLERS . 'wpdz-controller-metaboxes.php');
+include (WPDZ_CONTROLLERS . 'wpdz-controller-sidebars.php');
+include (WPDZ_MODELS . 'wpdz-metabox.php');
+include (WPDZ_MODELS . 'wpdz-metabox-settings.php');
+include (WPDZ_MODELS . 'wpdz-metabox-sidebars.php');
+include (WPDZ_MODELS . 'wpdz-metabox-dropzones.php');
+include (WPDZ_MODELS . 'wpdz-sidebar.php');
+
+if(is_admin()){
 WPDZ_Controller_Core::init();
 WPDZ_Controller_Sidebars::init();
 WPDZ_Controller_Metaboxes::init();
+}

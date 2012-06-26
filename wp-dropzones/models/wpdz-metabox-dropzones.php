@@ -35,12 +35,13 @@ class WPDZ_Metabox_Dropzones extends WPDZ_Metabox {
     /**
      * @var array 
      */
-    var $callback_args = array('callback' => "dropzones");
+    var $callback_args = array('metabox' => "layout-manager");
     
     /**
-     *
      * @var type 
      */
     var $view = 'wpdz-metabox-sidebars';
+
+    var $enabled_option_key = 'wpdz-metabox-dropzones_enabled';
     
 }

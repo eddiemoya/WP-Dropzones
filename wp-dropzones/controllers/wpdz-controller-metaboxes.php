@@ -10,53 +10,70 @@ class WPDZ_Controller_Metaboxes {
     public static $metaboxes;
 
     /**
-     * Adds metaboxes. Some are conditional on options set by the user.
+     * Start your engines.
      * 
      * @author Eddie Moya
-     * @global object $post
-     * 
      * @return void 
      */
     public function init() {
 
         require_once(ABSPATH . 'wp-admin/includes/widgets.php');
-
-        self::$metaboxes['settings'] = new WPDZ_Metabox_Settings();
-        self::$metaboxes['sidebars'] = new WPDZ_Metabox_Sidebars();
-        //self::$metaboxes['dropzones'] = new WPDZ_Metabox_Dropzones();
+        
         self::add_actions();
+        
+        self::create_metaboxes();
+        
     }
 
     /**
-     * Setup actions for this plugin
+     * Instantiate objects for each of the metabox classes.
+     * 
+     * This function was previously a factory-style method
+     * which concatinated strings to get the class. I scrapped
+     * that because there turned out to only be a few classes
+     * and this is easier to read.
+     * 
+     * @author Eddie Moya
+     * @return void.
+     */
+    private function create_metaboxes() {
+        
+        self::$metaboxes['settings']    = new WPDZ_Metabox_Settings();
+        self::$metaboxes['sidebars']    = new WPDZ_Metabox_Sidebars();
+        self::$metaboxes['dropzones']   = new WPDZ_Metabox_Dropzones();
+    }
+
+    /**
+     * Setup metabox related actions.
      * 
      * @author Eddie Moya
      * @uses add_action();
      * 
      * @return void
      */
-    protected function add_actions() {
-        if (strstr($_SERVER['REQUEST_URI'], 'wp-admin/post')) {
-            add_action('admin_enqueue_scripts', array(__CLASS__, 'enqueue'));
-            add_action('add_meta_boxes', array(__CLASS__, 'add_meta_boxes'));
-            add_action('save_post', array(__CLASS__, 'save_metaboxes'));
-        }
-        //add_action('init', array(WPDZ_Sidebar, 'ajax_actions'));
+    private function add_actions() {
+        add_action('admin_print_scripts-post.php',  array(__CLASS__, 'enqueue'));
+        add_action('add_meta_boxes',                array(__CLASS__, 'add_meta_boxes'));
+        add_action('save_post',                     array(__CLASS__, 'save_metaboxes'));
+        add_action('wp_ajax_refresh-metabox',       array(__CLASS__, 'refresh_metabox'));
     }
 
     /**
-     * Enqueue all necessary styles and scripts.
+     * Enqueue all necessary styles and scripts. 
+     * 
+     * I only called on post editor paged, due to the dynamically generated hook used.
      * 
      * @author Eddie Moya
      * @return void
      */
     public function enqueue() {
-        wp_register_style('widgets_metabox_styles', plugins_url('wp-dropzones/assets/css/widgets-metabox.css', WPDZ_PATH));
+        wp_register_style('widgets_metabox_styles', plugins_url('assets/css/widgets-metabox.css', dirname(__FILE__)));
         wp_enqueue_style('widgets_metabox_styles');
 
-        wp_register_script('save_widgets_metabox', plugins_url('wp-dropzones/assets/js/save-widgets.js', WPDZ_PATH));
+        wp_register_script('save_widgets_metabox', plugins_url('assets/js/save-widgets.js', dirname(__FILE__)));
         wp_enqueue_script('save_widgets_metabox');
 
+        //Better if I moved this to the sidebar controller, but meh.
         wp_enqueue_script('jquery');
         wp_enqueue_script('jquery-ui-droppable');
     }
@@ -76,12 +93,14 @@ class WPDZ_Controller_Metaboxes {
         
         foreach ((array) self::$metaboxes as $metabox) {
             
-            // if callback args were not passed as an array, then make it one.
+            // If callback args were not passed as an array, then make it one.
             if (!is_array($metabox->callback_args)) {
                 $metabox->callback_args = array($metabox->callback_args);
             }
             foreach ((array) $metabox->post_types as $post_type) {
-                add_meta_box($metabox->id, $metabox->title, array($metabox, 'view'), $post_type, $metabox->context, $metabox->priority, $metabox->callback_args);
+                if($metabox->is_enabled()){
+                    add_meta_box($metabox->id, $metabox->title, array($metabox, 'view'), $post_type, $metabox->context, $metabox->priority, $metabox->callback_args);
+                }
             }
         }
     }
@@ -102,16 +121,7 @@ class WPDZ_Controller_Metaboxes {
         }
     }
     
-    /**
-     *
-     * @global object $post
-     * @return type 
-     */
-    function is_enabled() {
-        global $post;
-
-        $meta = get_post_meta($post->ID, 'wpdz_dropzones_enabled', true);
-        return !empty($meta);
+    public function refresh_metabox(){
+        return json_encode(self::$metaboxes['sidebars']->view());
     }
-
 }

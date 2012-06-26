@@ -3,7 +3,7 @@
  * Description of wpdz-settings-metabox
  *
  * @author Eddie Moya
- * @uses WPDZ_Helper::include_view();
+ * @todo save_post functionality, to allow for previews.
  */
 class WPDZ_Sidebar {
     
@@ -58,11 +58,13 @@ class WPDZ_Sidebar {
     var $widgets;
     
     /**
-     * @param type $args 
+     * Start you fucking engines!
+     * 
+     * @param array $args optional. Array of properties to be set.
+     * @return void
      */
     public function __construct($args = array()){
-        global $post;
-        //print_r(get_post_meta($post->ID, 'wpdz_widgets-temp', true));
+
         //Get all properties of this object
         $properties = get_class_vars(__CLASS__);
 
@@ -74,55 +76,83 @@ class WPDZ_Sidebar {
             }
         }
         
+        //Determine this sidebars id.
         $this->id = $this->get_sidebar_id();
         
+        //Register this sidebar
         $this->register_sidebar();
         
-        $this->widgets  = $this->get_sidebar_widgets();    
+        //Get this sidebars widgets.
+        $sidebars  = $this->get_sidebar_widgets(); 
+        $this->widgets = $sidebars[$this->id];   
         
     }
  
     
     /**
-     * @global type $post_id
-     * @return type 
+     * Generates a slug for this sidebar, for this post specifically.
+     * 
+     * Uses the existing ID to differentiate between types of sidebars.
+     * 
+     * @global int $post_id
+     * @return string The ID of this sidebar. 
      */
-    public function get_sidebar_id() {
+    public function get_sidebar_id($id = null) {
+        global $post;
         
-        if(empty($this->id)){
-            $this->id = str_replace(' ' , '-', strtolower($this->name));
+      if(is_admin()){ $post_id = $_REQUEST['post']; } 
+        else { $post_id = $post->ID;}
+        
+        if(empty($id)){
+           $id = $this->id; 
         }
         
-        return 'wpdz-sidebar-'. $this->id. '-' . $_GET['post'];
+        if(empty($id)){
+            $id = str_replace(' ' , '-', strtolower($this->name));
+            $this->id = $id;
+        }
+        
+        return 'wpdz-sidebar-'. $id. '-' . $post_id;
     }
 
     /**
-     * Retreives widgets from post meta
+     * Retreives widget id's from post meta for the widgets added to this
+     * sidebar.
      * 
-     * @global type $post
-     * @return type 
+     * @global object $post
+     * @return array Array of slugs for each widget. 
      */
-     function get_sidebar_widgets() {
+    public function get_sidebar_widgets() {
         global $post, $wp_registered_sidebars, $wp_registered_widgets;
-        
-        $widgets = get_post_meta($_GET['post'], 'wpdz_widgets-temp', true);
-        
-        if(empty($widgets)){
+
+        if(is_admin()){ $post_id = $_REQUEST['post']; } 
+        else { $post_id = $post->ID;}
+
+        $widgets_key = 'wpdz_widgets';
+        $widgets_key .= (is_preview() || is_admin()) ? '-temp' : '';
+
+        $widgets = get_post_meta($post_id, $widgets_key, true);
+
+        if (empty($widgets)) {
             $widgets = wp_get_sidebars_widgets();
         }
-        
+
         wp_set_sidebars_widgets($widgets);
-        
+
         return (!empty($widgets)) ? $widgets : wp_get_widget_defaults();
     }
     
     /**
-     * Registers a 'ghost' sidebar for this post, which will only exist
-     * globally for the duration of this page view.
+     * Register this sidebar.
+     * 
+     * Keep in mind that each sidebar is not globally available,
+     * but is instead only registered and only exists for the durration
+     * of a particular page load.
+     * 
+     * @return void
      */
-    public function register_sidebar() {
-//         global $post, $wp_registered_sidebars;
-            register_sidebar(array(
+    private function register_sidebar() {
+        register_sidebar(array(
             'name' => $this->name,
             'id' => $this->id,
             'description' => $this->description,
@@ -134,7 +164,9 @@ class WPDZ_Sidebar {
     }
     
     /**
-     * @return type 
+     * Used by the admin sidebar view to add CSS classes.
+     * 
+     * @return string CSS classnames to be wrapped for the backend. 
      */
     public function get_wrap_class() {
         
@@ -147,12 +179,18 @@ class WPDZ_Sidebar {
     }
 
     /**
+     * Checks to see if the current setup has been saved or not.
      * 
+     * @return bool
      */
     public function is_outofdate(){
         global $post;
-        $temp_widgets   = get_post_meta($post->ID, 'wpdz_widgets-temp', true);
-        $saved_widgets  = get_post_meta($post->ID, 'wpdz_widgets', true);
+        
+        if(is_admin()){ $post_id = $_REQUEST['post']; } 
+        else { $post_id = $post->ID;}
+        
+        $temp_widgets   = get_post_meta($post_id, 'wpdz_widgets-temp', true);
+        $saved_widgets  = get_post_meta($post_id, 'wpdz_widgets', true);
         
         $outofdate = false;
         
@@ -163,20 +201,51 @@ class WPDZ_Sidebar {
         return $outofdate;
     }
     
-    public function add_actions(){
-            add_action('wp_ajax_wpdz-save-widget', array(__CLASS__, 'save_widget'));
-            add_action('wp_ajax_wpdz-save-order', array(__CLASS__, 'save_widget_order'));  
-            add_action('widgets_init', array($this, 'register_sidebar'));  
-
-
-    }
     /**
+     * Ajax callback - saves newly added widgets via ajax.
      * 
+     * @return void
      */
-    public function save_widget() {
-         global $post,  $wp_registered_widgets, $wp_registered_sidebars;
+    public function ajax_save_widget() {
+        global $post,  $wp_registered_widgets, $wp_registered_sidebars;
+ 
         update_post_meta($_POST['post_id'], 'wpdz_widgets-temp', wp_get_sidebars_widgets());
-        die(json_encode(get_post_meta($_POST['post_id'], 'wpdz_widgets-temp', true)));
+        update_post_meta($_POST['post_id'], 'wpdz_widgets-registered', $wp_registered_widgets);
+        die('1 - widget saved');
     }
+    
+    
+    /**
+     * Save the widgets, move them from -temp, to the perminent option.
+     * 
+     * Gets called on the 'save_post' action. 
+     * 
+     * The add_action for this is in WPDZ_Controller_Sidebars::add_actions();
+     * 
+     * @param int $post_id
+     * @return void 
+     */
+    public function save($post_id) {
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+            return;
+
+        $widgets = get_post_meta($post_id, 'wpdz-widgets-temp', true);
+        
+        if(!empty($widgets)){
+            update_post_meta($post_id, 'wpdz-widgets', $widgets);
+        }
+        
+    }
+    
+    
+    /**
+     * Include the sidebar view.
+     * 
+     * @return void 
+     */
+    public function view() {
+        include(WPDZ_VIEWS . 'wpdz-sidebar.php');
+    }
+    
 
 }
