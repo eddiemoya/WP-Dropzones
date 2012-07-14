@@ -5,7 +5,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wp-dropzones
 Description: Magical things that sound like fun, but might end badly.
 Version: 0.4 (Bear Fucking)
 Author: Eddie Moya
-Author URL: http://eddiemoya.com
+Author URI: http://eddiemoya.com
 */
 
 define(WPDZ_PATH, plugin_dir_path(__FILE__));
