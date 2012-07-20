@@ -1,7 +1,7 @@
 <?php /*
 Plugin Name: Dropzone Widget
 Description: Widget that spawns new sidebars.
-Version: 1.0
+Version: 0.8
 Author: Eddie Moya
  */
 
@@ -88,17 +88,21 @@ class Dropzone_Widget extends WP_Widget {
         
         $classes = array();
         
-        if($instance['wpdz_dropzone_type']) {
+        if($instance['wpdz_dropzone_type'] == 'custom') {
             $classes[] = $instance['span'];
-            $classes[] = $instance['border-left'];
-            $classes[] = $instance['border-right'];
+            if(isset($instance['border-left']))
+                $classes[] = 'border-left';
+            
+            if(isset($instance['border-right']))
+                $classes[] = "border-left";
         }
         
-        $before_widget = $this->add_class($before_widget, $classes);
-        
+        $before_widget = $this->add_class($before_widget, implode(', ',$classes));
+
         echo $before_widget;
         dynamic_sidebar($sidebar_uid);
         echo $after_widget;
+        
     }
     
     /**
@@ -107,20 +111,9 @@ class Dropzone_Widget extends WP_Widget {
      * @param type $class
      * @return type 
      */
-    function add_class($tag, $new_classes) {
+    function add_class($string, $class) {
+        return str_replace('$span', $class, $string);
         
-        $dom = new DOMDocument();
-        @$dom->loadHTML($tag);
-        $x = new DOMXPath($dom);
-        
-        foreach($new_classes as $class){
-            foreach ($x->query("//div") as $node) {
-                $classes = $node->getAttribute("class"). ' ' . $class;
-                $node->setAttribute('class', $classes);
-            }
-        }
-        
-        return $dom->saveHtml();
     }
     
     /**
@@ -338,39 +331,11 @@ Dropzone_Widget::register_widget();
 add_filter('wpdz_dropzones', 'add_dropzones');
 
 function add_dropzones($dropzones) {
-    $dropzones['right-rail'] = array(
-        'name' => 'Right Rail',
-        'id' => 'right-rail',
-        'description' => 'Use this area to control this pages layout',
-        'before_widget' => '<ul class="dropzone right-rail border-right">',
-        'after_widget' => '</ul>',
-        'before_title' => '<h2>',
-        'after_title' => '</h2>'
-    );
-   $dropzones['left-rail'] = array(
-        'name' => 'Left Rail',
-        'id' => 'left-rail',
-        'description' => 'Use this area to control this pages layout',
-        'before_widget' => '<ul class="dropzone left-rail border-right">',
-        'after_widget' => '</ul>',
-        'before_title' => '<h2>',
-        'after_title' => '</h2>'
-    );
-    $dropzones['content-area'] = array(
-        'name' => 'Content Area',
-        'id' => 'content-area',
-        'description' => 'Use this area to control this pages layout',
-        'before_widget' => '<ul class="dropzone content-area">',
-        'after_widget' => '</ul>',
-        'before_title' => '<h2>',
-        'after_title' => '</h2>'
-    );
-    
     $dropzones['custom'] = array(
         'name' => 'Custom Dropzone',
         'id' => 'custom',
         'description' => 'Use this area to control this pages layout',
-        'before_widget' => '<ul class="dropzone custom">',
+        'before_widget' => '<ul class="dropzone-widget widget %2$s $span">',
         'after_widget' => '</ul>',
         'before_title' => '<h2>',
         'after_title' => '</h2>'

@@ -107,7 +107,7 @@ class WPDZ_Controller_Sidebars {
                 'name' => 'Dropzones',
                 'id' => 'layout-manager',
                 'description' => 'Use this area to control this pages layout',
-                'before_widget' => '<ul>',
+                'before_widget' => '<ul class="dropzone $span">',
                 'after_widget' => '</ul>',
                 'before_title' => '<li>',
                 'after_title' => '<li>'
