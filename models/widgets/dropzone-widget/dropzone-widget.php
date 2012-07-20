@@ -97,7 +97,7 @@ class Dropzone_Widget extends WP_Widget {
                 $classes[] = "border-left";
         }
         
-        $before_widget = $this->add_class($before_widget, implode(', ',$classes));
+        $before_widget = $this->add_class($before_widget, implode(' ',$classes));
 
         echo $before_widget;
         dynamic_sidebar($sidebar_uid);
