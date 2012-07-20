@@ -50,10 +50,9 @@ class WPDZ_Controller_Sidebars {
         } else {
             $post_id = $post->ID;
         }
-        
+
         self::$registered_dropzones = get_post_meta($post_id, 'wpdz_widgets-registered' . $sidebar->id, true);
-        
-        
+
         /**
          * The order of these is critical. The layout manager needs to be instantiated before
          * we can get all its widgets and determine what dropzones should be available and what
