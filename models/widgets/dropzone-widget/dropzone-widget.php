@@ -84,7 +84,43 @@ class Dropzone_Widget extends WP_Widget {
         extract($instance);
         
         //register_sidebar($args);
-        dynamic_sidebar(WPDZ_Sidebar::get_sidebar_id($instance['wpdz_dropzone_type'] . _ . $this->number));
+        $sidebar_uid = WPDZ_Sidebar::get_sidebar_id($instance['wpdz_dropzone_type'] . _ . $this->number);
+        
+        $classes = array();
+        
+        if($instance['wpdz_dropzone_type']) {
+            $classes[] = $instance['span'];
+            $classes[] = $instance['border-left'];
+            $classes[] = $instance['border-right'];
+        }
+        
+        $before_widget = $this->add_class($before_widget, $classes);
+        
+        echo $before_widget;
+        dynamic_sidebar($sidebar_uid);
+        echo $after_widget;
+    }
+    
+    /**
+     *
+     * @param type $tag
+     * @param type $class
+     * @return type 
+     */
+    function add_class($tag, $new_classes) {
+        
+        $dom = new DOMDocument();
+        @$dom->loadHTML($tag);
+        $x = new DOMXPath($dom);
+        
+        foreach($new_classes as $class){
+            foreach ($x->query("//div") as $node) {
+                $classes = $node->getAttribute("class"). ' ' . $class;
+                $node->setAttribute('class', $classes);
+            }
+        }
+        
+        return $dom->saveHtml();
     }
     
     /**
@@ -106,26 +142,26 @@ class Dropzone_Widget extends WP_Widget {
         $instance = $old_instance;
    
         
-//        /**
-//         * Sanitize each option - be careful, if not all simple text fields,
-//         * then make use of other WordPress sanitization functions, but also
-//         * make use of PHP functions, and use logic to return false to reject
-//         * the entire update. 
-//         * 
-//         * @see http://codex.wordpress.org/Function_Reference/esc_attr
-//         */
-//        foreach($new_instance as $key => $value){
-//            $instance[$key] = esc_attr($value);
-//            
-//        }
-//        
-//        
-//        foreach($instance as $key => $value){
-//            if($value == 'on' && !isset($new_instance[$key])){
-//                unset($instance[$key]);
-//            }
-//
-//        }
+        /**
+         * Sanitize each option - be careful, if not all simple text fields,
+         * then make use of other WordPress sanitization functions, but also
+         * make use of PHP functions, and use logic to return false to reject
+         * the entire update. 
+         * 
+         * @see http://codex.wordpress.org/Function_Reference/esc_attr
+         */
+        foreach($new_instance as $key => $value){
+            $instance[$key] = esc_attr($value);
+            
+        }
+        
+        
+        foreach($instance as $key => $value){
+            if($value == 'on' && !isset($new_instance[$key])){
+                unset($instance[$key]);
+            }
+
+        }
         $instance['args'] = self::$dropzones[$new_instance['wpdz_dropzone_type']];
         $instance['title'] = $instance['args']['name'];
         $instance['wpdz_dropzone_type'] = $new_instance['wpdz_dropzone_type'];
@@ -165,6 +201,35 @@ class Dropzone_Widget extends WP_Widget {
         /* Examples of input fields one at a time. */
         $this->form_field('title', 'hidden', '', $instance);
         $this->form_field('wpdz_dropzone_type', 'select', 'Select a dropzone', $instance, $options);
+        
+        if('custom' == $instance['wpdz_dropzone_type']){
+            $show_options[] = array(
+                    'field_id' => 'span',
+                    'type'      => 'select',
+                    'label' =>  'Widget Width',
+                    'options' => array(
+                        'span3' =>  '25%',
+                        'span4'  => '33%',
+                        'span6' => '50%',
+                        'span8' => '66%',
+                        'span12' => '100%'
+                    )
+            );
+            
+            $show_options[] = array(
+                    'field_id' => 'border-left',
+                    'type'      => 'checkbox',
+                    'label' =>  'Left Border',
+            );
+            
+            $show_options[] = array(
+                    'field_id' => 'border-right',
+                    'type'      => 'checkbox',
+                    'label' =>  'Right Border',
+            );
+            
+            $this->form_fields($show_options, $instance);
+        }
         
 
     }
@@ -277,25 +342,35 @@ function add_dropzones($dropzones) {
         'name' => 'Right Rail',
         'id' => 'right-rail',
         'description' => 'Use this area to control this pages layout',
-        'before_widget' => '<ul class="dropzone right-rail">',
+        'before_widget' => '<ul class="dropzone right-rail border-right">',
         'after_widget' => '</ul>',
         'before_title' => '<h2>',
         'after_title' => '</h2>'
     );
-   $dropzones['hero-full'] = array(
-        'name' => 'Hero - Full Width',
-        'id' => 'hero-full',
+   $dropzones['left-rail'] = array(
+        'name' => 'Left Rail',
+        'id' => 'left-rail',
         'description' => 'Use this area to control this pages layout',
-        'before_widget' => '<ul class="dropzone hero-full">',
+        'before_widget' => '<ul class="dropzone left-rail border-right">',
         'after_widget' => '</ul>',
         'before_title' => '<h2>',
         'after_title' => '</h2>'
     );
-      $dropzones['2col-1row'] = array(
-        'name' => 'Two Column, One Row',
-        'id' => '2col-1row',
+    $dropzones['content-area'] = array(
+        'name' => 'Content Area',
+        'id' => 'content-area',
         'description' => 'Use this area to control this pages layout',
-        'before_widget' => '<ul class="dropzone 2col-1row">',
+        'before_widget' => '<ul class="dropzone content-area">',
+        'after_widget' => '</ul>',
+        'before_title' => '<h2>',
+        'after_title' => '</h2>'
+    );
+    
+    $dropzones['custom'] = array(
+        'name' => 'Custom Dropzone',
+        'id' => 'custom',
+        'description' => 'Use this area to control this pages layout',
+        'before_widget' => '<ul class="dropzone custom">',
         'after_widget' => '</ul>',
         'before_title' => '<h2>',
         'after_title' => '</h2>'
@@ -303,3 +378,28 @@ function add_dropzones($dropzones) {
    return $dropzones;
 }
 
+
+
+add_action('widgets_admin_page', 'sidebar_capabilities');
+
+/**
+ * Keep in mind that you can certainly create custom
+ * capabilities for your sidebars. You could create a loop
+ * that generates new capabilities for each sidebar and assigns them
+ * to admin. You could then manage those capabilities for other 
+ * users with the Members plugin by Justin Tadlock
+ */
+function sidebar_capabilities(){
+    global $wp_registered_sidebars;
+
+    //Remove the comment lines to see the global variable structure.
+    //print_r($wp_registered_sidebars); 
+
+    //Use whatever capabilities you want. 
+    //To test as admin, just put junk text for the cap.
+    if(is_admin() && !is_single()){
+
+        //This sidebar name is from the twenty-ten theme.
+       // unset($wp_registered_sidebars['wpdz-sidebar-layout-manager-']);
+    }
+}
