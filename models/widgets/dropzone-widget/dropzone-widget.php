@@ -205,6 +205,7 @@ class Dropzone_Widget extends WP_Widget {
                         'span4'  => '33%',
                         'span6' => '50%',
                         'span8' => '66%',
+                        'span9' => '75%',
                         'span12' => '100%'
                     )
             );
