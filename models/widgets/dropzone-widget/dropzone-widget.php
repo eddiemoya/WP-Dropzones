@@ -36,7 +36,24 @@ class Dropzone_Widget extends WP_Widget {
      */
     private $classname = 'dropzone-widget';
     
+    /**
+     *
+     * @var type 
+     */
+    private $width = '250';
     
+    
+    /**
+     * Never used - does nothing.
+     * @var type 
+     */
+    private $height = '200';
+    
+    
+    /**
+     *
+     * @var type 
+     */
     public static $dropzones;
     
     /**
@@ -51,9 +68,14 @@ class Dropzone_Widget extends WP_Widget {
             'classname' => $this->classname
         );
         
+        $control_options = array(
+            'height' => $this->height,
+            'width' => $this->width
+        );
+        
         self::$dropzones = apply_filters('wpdz_dropzones', array());
 
-        parent::WP_Widget($this->id_base, $this->widget_name, $this->widget_ops);
+        parent::WP_Widget($this->id_base, $this->widget_name, $this->widget_ops, $control_options);
     }
     
     /**
