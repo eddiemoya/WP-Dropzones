@@ -77,6 +77,7 @@ class WPDZ_Controller_Sidebars {
     public function add_actions() {
         add_action('wp_ajax_wpdz-save-widget', array(WPDZ_Sidebar, 'ajax_save_widget'));
         add_action('wp_ajax_refresh-metabox',  array(WPDZ_Controller_Metaboxes, 'refresh_metabox'));
+        add_action('widgets_admin_page',       array(__CLASS__,'hide_sidebars'));
         
         foreach((array)self::$sidebars as $sidebar){
             add_action('widgets_init', array($sidebar, 'register_sidebar'));
@@ -165,6 +166,33 @@ class WPDZ_Controller_Sidebars {
     }
     
     /**
+    * Hides dropzone sidebars when not on single pages in the admin (the real widgets place especially)
+    * 
+    * @global type $wp_registered_sidebars 
+    */
+    public function hide_sidebars(){
+        global $wp_registered_sidebars;
+
+        //Remove the comment lines to see the global variable structure.
+        //print_r($wp_registered_sidebars); 
+
+        //Use whatever capabilities you want. 
+        //To test as admin, just put junk text for the cap.
+        if(is_admin() && !is_single()){
+
+            //This sidebar name is from the twenty-ten theme.
+            unset($wp_registered_sidebars['wpdz-sidebar-layout-manager-']);
+
+            foreach($wp_registered_sidebars as $key => $sb){
+                if(strstr($key, 'wpdz-')){
+                    unset($wp_registered_sidebars[$key]);
+                }
+            }
+
+        }
+    }
+
+    /**
      * 
      */
     public function display_dropzones(){
@@ -181,3 +209,5 @@ class WPDZ_Controller_Sidebars {
 function display_dropzones(){
     WPDZ_Controller_Sidebars::display_dropzones();
 }
+
+

@@ -343,29 +343,3 @@ function add_dropzones($dropzones) {
     );
    return $dropzones;
 }
-
-
-
-add_action('widgets_admin_page', 'sidebar_capabilities');
-
-/**
- * Keep in mind that you can certainly create custom
- * capabilities for your sidebars. You could create a loop
- * that generates new capabilities for each sidebar and assigns them
- * to admin. You could then manage those capabilities for other 
- * users with the Members plugin by Justin Tadlock
- */
-function sidebar_capabilities(){
-    global $wp_registered_sidebars;
-
-    //Remove the comment lines to see the global variable structure.
-    //print_r($wp_registered_sidebars); 
-
-    //Use whatever capabilities you want. 
-    //To test as admin, just put junk text for the cap.
-    if(is_admin() && !is_single()){
-
-        //This sidebar name is from the twenty-ten theme.
-       // unset($wp_registered_sidebars['wpdz-sidebar-layout-manager-']);
-    }
-}
