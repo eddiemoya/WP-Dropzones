@@ -177,9 +177,13 @@ class Dropzone_Widget extends WP_Widget {
             }
 
         }
-        $instance['args'] = self::$dropzones[$new_instance['wpdz_dropzone_type']];
-        $instance['title'] = $instance['args']['name'];
-        $instance['wpdz_dropzone_type'] = $new_instance['wpdz_dropzone_type'];
+        // $instance['args'] = self::$dropzones[$new_instance['wpdz_dropzone_type']];
+        // $instance['title'] = $instance['args']['name'];
+        // $instance['wpdz_dropzone_type'] = $new_instance['wpdz_dropzone_type'];
+
+        $instance['args'] = self::$dropzones['custom'];
+        $instance['title'] = $new_instance['title'];
+        $instance['wpdz_dropzone_type'] = 'custom';
         
         
        // $instance['dropzone'] = self::$dropzones[$instance['wpdz_dropzone_type']];
@@ -209,43 +213,43 @@ class Dropzone_Widget extends WP_Widget {
         /* Merge saved input values with default values */
         $instance = wp_parse_args((array) $instance, $defaults);
 
-        foreach(self::$dropzones as $dropzone){
-            $options[$dropzone['id']] = $dropzone['name'];
-        }
+        // foreach(self::$dropzones as $dropzone){
+        //     $options[$dropzone['id']] = $dropzone['name'];
+        // }
 
         /* Examples of input fields one at a time. */
-        $this->form_field('title', 'hidden', '', $instance);
-        $this->form_field('wpdz_dropzone_type', 'select', 'Select a dropzone', $instance, $options);
+        $this->form_field('title', 'text', 'Widget Label (shown on admin side only)', $instance);
+        //$this->form_field('wpdz_dropzone_type', 'select', 'Select a dropzone', $instance, $options);
         
-        if('custom' == $instance['wpdz_dropzone_type']){
-            $show_options[] = array(
-                    'field_id' => 'span',
-                    'type'      => 'select',
-                    'label' =>  'Widget Width',
-                    'options' => array(
-                        'span3' =>  '25%',
-                        'span4'  => '33%',
-                        'span6' => '50%',
-                        'span8' => '66%',
-                        'span9' => '75%',
-                        'span12' => '100%'
-                    )
-            );
+        // if('custom' == $instance['wpdz_dropzone_type']){
+        //     $show_options[] = array(
+        //             'field_id' => 'span',
+        //             'type'      => 'select',
+        //             'label' =>  'Widget Width',
+        //             'options' => array(
+        //                 'span3' =>  '25%',
+        //                 'span4'  => '33%',
+        //                 'span6' => '50%',
+        //                 'span8' => '66%',
+        //                 'span9' => '75%',
+        //                 'span12' => '100%'
+        //             )
+        //     );
             
-            $show_options[] = array(
-                    'field_id' => 'border-left',
-                    'type'      => 'checkbox',
-                    'label' =>  'Left Border',
-            );
+        //     $show_options[] = array(
+        //             'field_id' => 'border-left',
+        //             'type'      => 'checkbox',
+        //             'label' =>  'Left Border',
+        //     );
             
-            $show_options[] = array(
-                    'field_id' => 'border-right',
-                    'type'      => 'checkbox',
-                    'label' =>  'Right Border',
-            );
+        //     $show_options[] = array(
+        //             'field_id' => 'border-right',
+        //             'type'      => 'checkbox',
+        //             'label' =>  'Right Border',
+        //     );
             
-            $this->form_fields($show_options, $instance);
-        }
+        //     $this->form_fields($show_options, $instance);
+        //}
         
 
     }
@@ -265,11 +269,20 @@ class Dropzone_Widget extends WP_Widget {
      * @param array $instance   [Required] Current instance of widget option values.
      * @return void
      */
-    private function form_fields($fields, $instance){
+    public function form_fields($fields, $instance, $group = false){
+        
+        if($group) {
+            echo "<p>";
+        }
+
         foreach($fields as &$field){
             extract($field);
             
             $this->form_field($field_id, $type, $label, $instance, $options);
+        }
+
+        if($group){
+             echo "</p>";
         }
     }
     
@@ -290,9 +303,11 @@ class Dropzone_Widget extends WP_Widget {
      * 
      * @return void
      */
-    private function form_field($field_id, $type, $label, $instance, $options = array()){
+    public function form_field($field_id, $type, $label, $instance, $options = array(), $group = false){
   
-        ?><p><?php
+        if(!$group){
+             echo "<p>";
+        }
         
         if(!empty($label) && 'checkbox' != $type){ ?>
             <label for="<?php echo $this->get_field_id( $field_id ); ?>"><?php echo $label; ?>: </label> <?php
@@ -345,7 +360,9 @@ class Dropzone_Widget extends WP_Widget {
                 <?php
         }
         
-        ?></p><?php
+        if(!$group){
+             echo "</p>";
+        }
     }
 }
 

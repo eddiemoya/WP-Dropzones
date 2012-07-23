@@ -75,11 +75,12 @@ class WPDZ_Controller_Sidebars {
      * @return void. 
      */
     public function add_actions() {
-        add_action('wp_ajax_wpdz-save-widget', array(WPDZ_Sidebar, 'ajax_save_widget'));
-        add_action('wp_ajax_refresh-metabox',  array(WPDZ_Controller_Metaboxes, 'refresh_metabox'));
-        add_action('widgets_admin_page',       array(__CLASS__,'hide_sidebars'));
-        
-        foreach((array)self::$sidebars as $sidebar){
+        add_action('wp_ajax_wpdz-save-widget',  array(WPDZ_Sidebar, 'ajax_save_widget'));
+        add_action('wp_ajax_refresh-metabox',   array(WPDZ_Controller_Metaboxes, 'refresh_metabox'));
+        add_action('widgets_admin_page',        array(__CLASS__, 'hide_sidebars'));
+        add_filter('widget_form_callback',      array(__CLASS__, 'widgets_form_extend'), 10, 2);
+
+        foreach ((array) self::$sidebars as $sidebar) {
             add_action('widgets_init', array($sidebar, 'register_sidebar'));
         }
     }
@@ -173,10 +174,8 @@ class WPDZ_Controller_Sidebars {
     public function hide_sidebars(){
         global $wp_registered_sidebars;
 
-        //Remove the comment lines to see the global variable structure.
         //print_r($wp_registered_sidebars); 
 
-        //Use whatever capabilities you want. 
         //To test as admin, just put junk text for the cap.
         if(is_admin() && !is_single()){
 
@@ -197,10 +196,155 @@ class WPDZ_Controller_Sidebars {
      */
     public function display_dropzones(){
         self::init();
-        foreach((array)self::$sidebars['layout-manager'] as $layout_manager){
+        foreach ((array) self::$sidebars['layout-manager'] as $layout_manager) {
             dynamic_sidebar($layout_manager->id);
         }
     }
+
+    function widgets_form_extend($instance, $widget) {
+
+        $spans[] = array(
+            'field_id' => 'span',
+            'type' => 'select',
+            'label' => 'Widget Width',
+            'options' => array(
+                'span3' => '25%',
+                'span4' => '33%',
+                'span6' => '50%',
+                'span8' => '66%',
+                'span9' => '75%',
+                'span12' => '100%'
+            )
+        );
+
+        $borders[] = array(
+            'field_id' => 'border-left',
+            'type' => 'checkbox',
+            'label' => 'Left Border',
+        );
+
+        $borders[] = array(
+            'field_id' => 'border-right',
+            'type' => 'checkbox',
+            'label' => 'Right Border',
+        );
+
+        self::form_fields($widget, $spans, $instance);
+        self::form_fields($widget, $borders, $instance, true);
+
+        return $instance;
+    }
+    
+    /**
+     * Helper function - does not need to be part of widgets, this is custom, but 
+     * is helpful in generating multiple input fields for the admin form at once. 
+     * 
+     * This is a wrapper for the singular form_field() function.
+     * 
+     * @author Eddie Moya
+     * 
+     * @uses self::form_fields()
+     * 
+     * @param array $fields     [Required] Nested array of field settings
+     * @param array $instance   [Required] Current instance of widget option values.
+     * @return void
+     */
+    public function form_fields($widget, $fields, $instance, $group = false){
+        
+        if($group) {
+            echo "<p>";
+        }
+
+        foreach($fields as &$field){
+            extract($field);
+            
+            self::form_field($widget, $field_id, $type, $label, $instance, $options, $group);
+        }
+
+        if($group) {
+            echo "</p>";
+        }
+    }
+    
+    /**
+     * Helper function - does not need to be part of widgets, this is custom, but 
+     * is helpful in generating single input fields for the admin form at once. 
+     *
+     * @author Eddie Moya
+     * 
+     * @uses get_field_id() (No Codex Documentation)
+     * @uses get_field_name() http://codex.wordpress.org/Function_Reference/get_field_name
+     * 
+     * @param string $field_id  [Required] This will be the CSS id for the input, but also will be used internally by wordpress to identify it. Use these in the form() function to set detaults.
+     * @param string $type      [Required] The type of input to generate (text, textarea, select, checkbox]
+     * @param string $label     [Required] Text to show next to input as its label.
+     * @param array $instance   [Required] Current instance of widget option values. 
+     * @param array $options    [Optional] Associative array of values and labels for html Option elements.
+     * 
+     * @return void
+     */
+    public function form_field($widget, $field_id, $type, $label, $instance, $options = array(), $group = false){
+  
+        if(!$group) {
+            echo "<p>";
+        }
+        
+        if(!empty($label) && 'checkbox' != $type){ ?>
+            <label for="<?php echo $widget->get_field_id( $field_id ); ?>"><?php echo $label; ?>: </label> <?php
+        }
+        switch ($type){
+            
+            case 'text': ?>
+                    <input type="text" id="<?php echo $widget->get_field_id( $field_id ); ?>" style="<?php echo $style; ?>" class="widefat" name="<?php echo $widget->get_field_name( $field_id ); ?>" value="<?php echo $instance[$field_id]; ?>" />
+                <?php break;
+            
+            
+            case 'hidden': ?>
+                    <input id="<?php echo $widget->get_field_id( $field_id ); ?>" type="hidden" style="<?php echo $style; ?>" class="widefat" name="<?php echo $widget->get_field_name( $field_id ); ?>" value="<?php echo $instance[$field_id]; ?>" />
+                <?php break;
+            
+            case 'select': ?>
+                    <select id="<?php echo $widget->get_field_id( $field_id ); ?>" class="widefat" name="<?php echo $widget->get_field_name($field_id); ?>">
+                        <?php
+                            foreach ( $options as $value => $label ) :  ?>
+                        
+                                <option value="<?php echo $value; ?>" <?php selected($value, $instance[$field_id]) ?>>
+                                    <?php echo $label ?>
+                                </option><?php
+                                
+                            endforeach; 
+                        ?>
+                    </select>
+                    
+				<?php break;
+                
+            case 'textarea':
+                
+                $rows = (isset($options['rows'])) ? $options['rows'] : '16';
+                $cols = (isset($options['cols'])) ? $options['cols'] : '20';
+                
+                ?>                    <textarea class="widefat" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>" id="<?php echo $widget->get_field_id($field_id); ?>" name="<?php echo $widget->get_field_name($field_id); ?>"><?php echo $instance[$field_id]; ?></textarea>
+                <?php break;
+            
+            case 'radio' :
+                /**
+                 * Need to figure out how to automatically group radio button settings with this structure.
+                 */
+                ?>
+                    
+                <?php break;
+            
+            case 'checkbox' : ?>
+                    <input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($field_id); ?>" name="<?php echo $widget->get_field_name($field_id); ?>"<?php checked( (!empty($instance[$field_id]))); ?> />
+                	<label for="<?php echo $widget->get_field_id( $field_id ); ?>"><?php echo $label; ?></label>
+                <?php
+        }
+        
+        if(!$group) {
+            echo "</p>";
+        }
+    }
+
 }
 
 /**
@@ -211,3 +355,36 @@ function display_dropzones(){
 }
 
 
+function widgets_form_extend( $instance, $widget ) {
+	if ( !isset($instance['classes']) )
+		$instance['classes'] = null;
+
+	$row = "<p>\n";
+	$row .= "\t<label for='widget-{$widget->id_base}-{$widget->number}-classes'>Additional Classes <small>(separate with spaces)</small></label>\n";
+	$row .= "\t<input type='text' name='widget-{$widget->id_base}[{$widget->number}][classes]' id='widget-{$widget->id_base}-{$widget->number}-classes' class='widefat' value='{$instance['classes']}'/>\n";
+	$row .= "</p>\n";
+
+	echo $row;
+	return $instance;
+}
+
+
+function kc_widget_update( $instance, $new_instance ) {
+	$instance['classes'] = $new_instance['classes'];
+	return $instance;
+}
+add_filter( 'widget_update_callback', 'kc_widget_update', 10, 2 );
+
+function kc_dynamic_sidebar_params( $params ) {
+	global $wp_registered_widgets;
+	$widget_id	= $params[0]['widget_id'];
+	$widget_obj	= $wp_registered_widgets[$widget_id];
+	$widget_opt	= get_option($widget_obj['callback'][0]->option_name);
+	$widget_num	= $widget_obj['params'][0]['number'];
+
+	if ( isset($widget_opt[$widget_num]['classes']) && !empty($widget_opt[$widget_num]['classes']) )
+		$params[0]['before_widget'] = preg_replace( '/class="/', "class=\"{$widget_opt[$widget_num]['classes']} ", $params[0]['before_widget'], 1 );
+
+	return $params;
+}
+add_filter( 'dynamic_sidebar_params', 'kc_dynamic_sidebar_params' );
