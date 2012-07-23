@@ -26,8 +26,10 @@ include (WPDZ_MODELS . 'wpdz-metabox-sidebars.php');
 include (WPDZ_MODELS . 'wpdz-metabox-dropzones.php');
 include (WPDZ_MODELS . 'wpdz-sidebar.php');
 
+Dropzone_Widget::register_widget();
+
 if(is_admin()){
-WPDZ_Controller_Core::init();
-WPDZ_Controller_Sidebars::init();
-WPDZ_Controller_Metaboxes::init();
+	//WPDZ_Controller_Core::init();
+	WPDZ_Controller_Sidebars::init();
+	WPDZ_Controller_Metaboxes::init();
 }

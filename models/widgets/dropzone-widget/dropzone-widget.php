@@ -365,20 +365,3 @@ class Dropzone_Widget extends WP_Widget {
         }
     }
 }
-
-Dropzone_Widget::register_widget();
-
-add_filter('wpdz_dropzones', 'add_dropzones');
-
-function add_dropzones($dropzones) {
-    $dropzones['custom'] = array(
-        'name' => 'Custom Dropzone',
-        'id' => 'custom',
-        'description' => 'Use this area to control this pages layout',
-        'before_widget' => '<ul class="dropzone-widget widget %2$s $span">',
-        'after_widget' => '</ul>',
-        'before_title' => '<h2>',
-        'after_title' => '</h2>'
-    );
-   return $dropzones;
-}

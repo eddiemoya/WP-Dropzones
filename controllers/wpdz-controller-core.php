@@ -13,15 +13,6 @@ class WPDZ_Controller_Core {
      * @author Eddie Moya
      * @return void
      */
-    public function init(){   
-        
-       
-    }
-    
-
-
-
-    
-
+    public function init(){ }
 }
 
