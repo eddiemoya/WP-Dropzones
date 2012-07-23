@@ -25,6 +25,7 @@ include (WPDZ_MODELS . 'wpdz-metabox-settings.php');
 include (WPDZ_MODELS . 'wpdz-metabox-sidebars.php');
 include (WPDZ_MODELS . 'wpdz-metabox-dropzones.php');
 include (WPDZ_MODELS . 'wpdz-sidebar.php');
+include (WPDZ_PATH   . 'functions.php');
 
 Dropzone_Widget::register_widget();
 

@@ -78,8 +78,7 @@ class WPDZ_Controller_Sidebars {
         add_action('wp_ajax_wpdz-save-widget',  array(WPDZ_Sidebar, 'ajax_save_widget'));
         add_action('wp_ajax_refresh-metabox',   array(WPDZ_Controller_Metaboxes, 'refresh_metabox'));
         add_action('widgets_admin_page',        array(__CLASS__, 'hide_sidebars'));
-        add_filter('widget_form_callback',      array(__CLASS__, 'widgets_form_extend'), 10, 2);
-        add_filter('widget_update_callback',    array(__CLASS__, 'widgets_form_extend_update', 10, 2 ));
+        //add_filter('widget_form_callback',      array(__CLASS__, 'widgets_form_extend'), 10, 2);
 
         foreach ((array) self::$sidebars as $sidebar) {
             add_action('widgets_init', array($sidebar, 'register_sidebar'));
@@ -234,10 +233,6 @@ class WPDZ_Controller_Sidebars {
         self::form_fields($widget, $borders, $instance, true);
 
         return $instance;
-    }
-
-    public function widgets_form_extend_update( $instance, $new_instance ){
-
     }
     
     /**
