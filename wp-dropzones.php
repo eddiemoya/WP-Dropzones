@@ -3,7 +3,7 @@
 Plugin Name: WP Dropzones
 Plugin URI: http://wordpress.org/extend/plugins/wp-dropzones
 Description: Magical things that sound like fun, but might end badly.
-Version: 0.4 (Docking)
+Version: 0.4.1 (Docking)
 Author: Eddie Moya
 Author URI: http://eddiemoya.com
 */
