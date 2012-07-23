@@ -220,7 +220,7 @@ class Dropzone_Widget extends WP_Widget {
         // }
 
         /* Examples of input fields one at a time. */
-        $this->form_field('title', 'text', 'Widget Label (shown on admin side only)', $instance);
+        $this->form_field('title', 'text', 'Widget Label (admin side only)', $instance);
         //$this->form_field('wpdz_dropzone_type', 'select', 'Select a dropzone', $instance, $options);
         
         // if('custom' == $instance['wpdz_dropzone_type']){

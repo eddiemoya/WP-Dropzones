@@ -20,7 +20,7 @@ class WPDZ_Metabox_Settings extends WPDZ_Metabox {
     /**
      * @var string|array 
      */
-    var $post_types = array('page');
+    var $post_types = array('page', 'section');
     
     /**
      * @var string 

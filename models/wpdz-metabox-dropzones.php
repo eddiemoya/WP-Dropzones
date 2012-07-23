@@ -20,7 +20,7 @@ class WPDZ_Metabox_Dropzones extends WPDZ_Metabox {
     /**
      * @var string|array 
      */
-    var $post_types = 'page';
+    var $post_types = array('page', 'section');
     
     /**
      * @var string 
@@ -30,7 +30,7 @@ class WPDZ_Metabox_Dropzones extends WPDZ_Metabox {
     /**
      * @var string
      */
-    var $priority = 'low';
+    var $priority = array('low', 'high');
     
     /**
      * @var array 

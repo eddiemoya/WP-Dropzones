@@ -97,9 +97,14 @@ class WPDZ_Controller_Metaboxes {
             if (!is_array($metabox->callback_args)) {
                 $metabox->callback_args = array($metabox->callback_args);
             }
-            foreach ((array) $metabox->post_types as $post_type) {
+            foreach ((array) $metabox->post_types as $index => $post_type) {
                 if($metabox->is_enabled()){
-                    add_meta_box($metabox->id, $metabox->title, array($metabox, 'view'), $post_type, $metabox->context, $metabox->priority, $metabox->callback_args);
+                    if(is_array($metabox->priority)){
+                        $priority = $metabox->priority[$index];
+                    } else {
+                        $priority = $metabox->priority;
+                    }
+                    add_meta_box($metabox->id, $metabox->title, array($metabox, 'view'), $post_type, $metabox->context, $priority, $metabox->callback_args);
                 }
             }
         }
