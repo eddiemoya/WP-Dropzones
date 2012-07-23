@@ -108,18 +108,20 @@ class Dropzone_Widget extends WP_Widget {
         //register_sidebar($args);
         $sidebar_uid = WPDZ_Sidebar::get_sidebar_id($instance['wpdz_dropzone_type'] . _ . $this->number);
         
-        $classes = array();
         
-        if($instance['wpdz_dropzone_type'] == 'custom') {
-            $classes[] = $instance['span'];
-            if(isset($instance['border-left']))
-                $classes[] = 'border-left';
+        
+        // if($instance['wpdz_dropzone_type'] == 'custom') {
+        //     $classes[] = $instance['span'];
+        //     if(isset($instance['border-left']))
+        //         $classes[] = 'border-left';
             
-            if(isset($instance['border-right']))
-                $classes[] = "border-left";
-        }
+        //     if(isset($instance['border-right']))
+        //         $classes[] = "border-left";
+        // }
+
+
         
-        $before_widget = $this->add_class($before_widget, implode(' ',$classes));
+        //$before_widget = $this->add_class($before_widget, implode(' ',$classes));
 
         echo $before_widget;
         dynamic_sidebar($sidebar_uid);

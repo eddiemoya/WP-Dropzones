@@ -44,7 +44,8 @@ class WPDZ_Controller_Sidebars {
     public function init() {
         global $post;
         add_action('init', array(__CLASS__, 'add_actions'));
-        
+        add_filter('dynamic_sidebar_params',    array(__CLASS__, 'add_classes') );
+
         if(is_admin()){
             $post_id = $_REQUEST['post'];
         } else {
@@ -78,7 +79,9 @@ class WPDZ_Controller_Sidebars {
         add_action('wp_ajax_wpdz-save-widget',  array(WPDZ_Sidebar, 'ajax_save_widget'));
         add_action('wp_ajax_refresh-metabox',   array(WPDZ_Controller_Metaboxes, 'refresh_metabox'));
         add_action('widgets_admin_page',        array(__CLASS__, 'hide_sidebars'));
-        //add_filter('widget_form_callback',      array(__CLASS__, 'widgets_form_extend'), 10, 2);
+        add_filter('widget_form_callback',      array(__CLASS__, 'widgets_form_extend'), 10, 2);
+        add_filter('widget_update_callback',    array(__CLASS__, 'widget_update'), 10, 2 );
+        
 
         foreach ((array) self::$sidebars as $sidebar) {
             add_action('widgets_init', array($sidebar, 'register_sidebar'));
@@ -109,7 +112,7 @@ class WPDZ_Controller_Sidebars {
                 'name' => 'Dropzones',
                 'id' => 'layout-manager',
                 'description' => 'Use this area to control this pages layout',
-                'before_widget' => '<ul class="dropzone $span">',
+                'before_widget' => '<ul class="dropzone">',
                 'after_widget' => '</ul>',
                 'before_title' => '<li>',
                 'after_title' => '<li>'
@@ -234,6 +237,39 @@ class WPDZ_Controller_Sidebars {
 
         return $instance;
     }
+
+    function widget_update( $instance, $new_instance ) {
+        $instance['span'] = $new_instance['span'];
+        $instance['border-left'] = $new_instance['border-left'];
+        $instance['border-right'] = $new_instance['border-right'];
+        
+        return $instance;
+    }
+
+    public function add_classes( $params ) {
+        global $wp_registered_widgets;
+        $widget_id  = $params[0]['widget_id'];
+        $widget_obj = $wp_registered_widgets[$widget_id];
+        $widget_opt = get_option($widget_obj['callback'][0]->option_name);
+        $widget_num = $widget_obj['params'][0]['number'];
+
+        $classes[] = $widget_opt[$widget_num]['span'];
+        if(isset($widget_opt[$widget_num]['border-left']))
+            $classes[] = 'border-left';
+        
+        if(isset($widget_opt[$widget_num]['border-right']))
+            $classes[] = "border-left";
+
+
+
+        if ( isset($classes) && !empty($classes) )
+            $classes = implode(' ',$classes);
+            $params[0]['before_widget'] = preg_replace( '/class="/', "class=\"{$classes} ", $params[0]['before_widget'], 1 );
+
+        return $params;
+    }
+
+
     
     /**
      * Helper function - does not need to be part of widgets, this is custom, but 
@@ -346,3 +382,4 @@ class WPDZ_Controller_Sidebars {
     }
 
 }
+
