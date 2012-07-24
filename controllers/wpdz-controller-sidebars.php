@@ -114,8 +114,8 @@ class WPDZ_Controller_Sidebars {
                 'description' => 'Use this area to control this pages layout',
                 'before_widget' => '<ul class="dropzone">',
                 'after_widget' => '</ul>',
-                'before_title' => '<li>',
-                'after_title' => '<li>'
+                'before_title' => '<h4>',
+                'after_title' => '</h4>'
             );
         } else {
             foreach ((array) self::abracadabra() as $key => $dropzone) {
