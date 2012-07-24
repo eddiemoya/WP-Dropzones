@@ -9,7 +9,7 @@ function add_dropzones($dropzones) {
         'id' => 'custom',
         'description' => 'Use this area to control this pages layout',
         'before_widget' => '<article class="content-container dropzone-widget widget %2$s">',
-        'after_widget' => '</ul>',
+        'after_widget' => '</article>',
         'before_title' => '<header class="content-header"><h3>',
         'after_title' => '</h3></header>'
     );
