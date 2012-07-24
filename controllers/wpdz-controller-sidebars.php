@@ -205,7 +205,8 @@ class WPDZ_Controller_Sidebars {
     }
 
     function widgets_form_extend($instance, $widget) {
-
+        $instance['widget_classname'] = $widget->widget_options['classname'];
+        //print_pre($widget);
         $spans[] = array(
             'field_id' => 'span',
             'type' => 'select',
@@ -232,6 +233,12 @@ class WPDZ_Controller_Sidebars {
             'label' => 'Right Border',
         );
 
+        $borders[] = array(
+            'field_id' => 'widget_classname',
+            'type' => 'hidden',
+            'label' => 'Right Border',
+        );
+
         self::form_fields($widget, $spans, $instance);
         self::form_fields($widget, $borders, $instance, true);
 
@@ -254,11 +261,16 @@ class WPDZ_Controller_Sidebars {
         $widget_num = $widget_obj['params'][0]['number'];
 
         $classes[] = $widget_opt[$widget_num]['span'];
+        $classes[] = $widget_opt[$widget_num]['widget_classname'];
+        
         if(isset($widget_opt[$widget_num]['border-left']))
             $classes[] = 'border-left';
         
         if(isset($widget_opt[$widget_num]['border-right']))
             $classes[] = "border-left";
+
+    
+            
 
 
 
