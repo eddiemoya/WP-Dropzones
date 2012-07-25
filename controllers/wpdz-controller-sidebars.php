@@ -236,7 +236,7 @@ class WPDZ_Controller_Sidebars {
         $borders[] = array(
             'field_id' => 'widget_classname',
             'type' => 'hidden',
-            'label' => 'Right Border',
+            'label' => '',
         );
 
         self::form_fields($widget, $spans, $instance);
@@ -268,11 +268,6 @@ class WPDZ_Controller_Sidebars {
         
         if(isset($widget_opt[$widget_num]['border-right']))
             $classes[] = "border-left";
-
-    
-            
-
-
 
         if ( isset($classes) && !empty($classes) )
             $classes = implode(' ',$classes);
