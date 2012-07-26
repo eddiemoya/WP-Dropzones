@@ -128,15 +128,16 @@ class WPDZ_Sidebar {
         if(is_admin()){ $post_id = $_REQUEST['post']; } 
         else { $post_id = $post->ID;}
 
-        $widgets_key = 'wpdz_widgets';
-        $widgets_key .= (is_preview() || is_admin()) ? '-temp' : '';
+        $widgets_key = 'wpdz_widgets-temp';
+        //$widgets_key .= (is_preview() || is_admin()) ? '-temp' : '';
 
         $widgets = get_post_meta($post_id, $widgets_key, true);
 
-        if (empty($widgets)) {
-            $widgets = wp_get_sidebars_widgets();
-        }
+ 
 
+        if (empty($widgets)) {
+            $widgets = $this->wp_get_sidebars_widgets();
+        }
         wp_set_sidebars_widgets($widgets);
 
         return (!empty($widgets)) ? $widgets : wp_get_widget_defaults();
@@ -229,10 +230,10 @@ class WPDZ_Sidebar {
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
             return;
 
-        $widgets = get_post_meta($post_id, 'wpdz-widgets-temp', true);
+        $widgets = get_post_meta($post_id, 'wpdz_widgets-temp', true);
         
         if(!empty($widgets)){
-            update_post_meta($post_id, 'wpdz-widgets', $widgets);
+            update_post_meta($post_id, 'wpdz_widgets', $widgets);
         }
         
     }
@@ -246,6 +247,32 @@ class WPDZ_Sidebar {
     public function view() {
         include(WPDZ_VIEWS . 'wpdz-sidebar.php');
     }
+
+function wp_get_sidebars_widgets($deprecated = true) {
+    if ( $deprecated !== true )
+        _deprecated_argument( __FUNCTION__, '2.8.1' );
+
+    global $wp_registered_widgets, $_wp_sidebars_widgets, $sidebars_widgets;
+    //unset($_wp_sidebars_widgets);
+    // If loading from front page, consult $_wp_sidebars_widgets rather than options
+    // to see if wp_convert_widget_settings() has made manipulations in memory.
+    if ( !is_admin() ) {
+        //if ( empty($_wp_sidebars_widgets) )
+            $_wp_sidebars_widgets = get_option('sidebars_widgets', array());
+
+        $sidebars_widgets = $_wp_sidebars_widgets;
+    } else {
+        $sidebars_widgets = get_option('sidebars_widgets', array());
+    }
+
+    if ( is_array( $sidebars_widgets ) && isset($sidebars_widgets['array_version']) )
+        unset($sidebars_widgets['array_version']);
+    /// USE THE FILTER!!
+    $sidebars_widgets = apply_filters('sidebars_widgets', $sidebars_widgets);
+    return $sidebars_widgets;
+}
+
+
     
 
 }
