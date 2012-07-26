@@ -128,8 +128,8 @@ class WPDZ_Sidebar {
         if(is_admin()){ $post_id = $_REQUEST['post']; } 
         else { $post_id = $post->ID;}
 
-        $widgets_key = 'wpdz_widgets-temp';
-        //$widgets_key .= (is_preview() || is_admin()) ? '-temp' : '';
+        $widgets_key = 'wpdz_widgets';
+        $widgets_key .= (is_preview() || is_admin()) ? '-temp' : '';
 
         $widgets = get_post_meta($post_id, $widgets_key, true);
 
