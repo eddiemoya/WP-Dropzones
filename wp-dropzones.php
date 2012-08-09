@@ -8,12 +8,12 @@ Author: Eddie Moya
 Author URI: http://eddiemoya.com
 */
 
-define(WPDZ_PATH, plugin_dir_path(__FILE__));
-define(WPDZ_ASSETS, WPDZ_PATH . 'assets/');
-define(WPDZ_CONTROLLERS, WPDZ_PATH . 'controllers/');
-define(WPDZ_VIEWS, WPDZ_PATH . 'views/');
-define(WPDZ_MODELS, WPDZ_PATH . 'models/');
-define(WPDZ_WIDGETS, WPDZ_MODELS . 'widgets/');
+define('WPDZ_PATH', plugin_dir_path(__FILE__));
+define('WPDZ_ASSETS', WPDZ_PATH . 'assets/');
+define('WPDZ_CONTROLLERS', WPDZ_PATH . 'controllers/');
+define('WPDZ_VIEWS', WPDZ_PATH . 'views/');
+define('WPDZ_MODELS', WPDZ_PATH . 'models/');
+define('WPDZ_WIDGETS', WPDZ_MODELS . 'widgets/');
 
 
 include (WPDZ_WIDGETS . 'dropzone-widget/dropzone-widget.php');
