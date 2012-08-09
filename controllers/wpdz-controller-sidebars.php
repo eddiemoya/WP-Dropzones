@@ -46,24 +46,26 @@ class WPDZ_Controller_Sidebars {
         add_action('init', array(__CLASS__, 'add_actions'));
         add_filter('dynamic_sidebar_params',    array(__CLASS__, 'add_classes') );
 
-        if(is_admin()){
-            $post_id = $_REQUEST['post'];
-        } else {
-            $post_id = $post->ID;
-        }
+        if(isset($_REQUEST['post']) || isset($post)){
+            if(is_admin()){
+                $post_id = $_REQUEST['post'];
+            } else {
+                $post_id = $post->ID;
+            }
 
-        self::$registered_dropzones = get_post_meta($post_id, 'wpdz_widgets-registered' . $sidebar->id, true);
+            self::$registered_dropzones = get_post_meta($post_id, 'wpdz_widgets-registered', true);
 
-        /**
-         * The order of these is critical. The layout manager needs to be instantiated before
-         * we can get all its widgets and determine what dropzones should be available and what
-         * their settings should be.
-         */
-        self::get_sidebar_settings('layout-manager');
-        self::register_sidebars('layout-manager');
-        
-        self::get_sidebar_settings('sidebars');
-        self::register_sidebars('sidebars');
+            /**
+             * The order of these is critical. The layout manager needs to be instantiated before
+             * we can get all its widgets and determine what dropzones should be available and what
+             * their settings should be.
+             */
+            self::get_sidebar_settings('layout-manager');
+            self::register_sidebars('layout-manager');
+            
+            self::get_sidebar_settings('sidebars');
+            self::register_sidebars('sidebars');
+        } 
     }
 
     
@@ -76,8 +78,8 @@ class WPDZ_Controller_Sidebars {
      * @return void. 
      */
     public function add_actions() {
-        add_action('wp_ajax_wpdz-save-widget',  array(WPDZ_Sidebar, 'ajax_save_widget'));
-        add_action('wp_ajax_refresh-metabox',   array(WPDZ_Controller_Metaboxes, 'refresh_metabox'));
+        add_action('wp_ajax_wpdz-save-widget',  array('WPDZ_Sidebar', 'ajax_save_widget'));
+        add_action('wp_ajax_refresh-metabox',   array('WPDZ_Controller_Metaboxes', 'refresh_metabox'));
         add_action('widgets_admin_page',        array(__CLASS__, 'hide_sidebars'));
         add_filter('widget_form_callback',      array(__CLASS__, 'widgets_form_extend'), 10, 2);
         add_filter('widget_update_callback',    array(__CLASS__, 'widget_update'), 10, 2 );
