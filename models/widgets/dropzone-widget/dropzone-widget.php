@@ -75,7 +75,7 @@ class Dropzone_Widget extends WP_Widget {
         
         self::$dropzones = apply_filters('wpdz_dropzones', array());
 
-        parent::WP_Widget($this->id_base, $this->widget_name, $this->widget_ops, $control_options);
+        parent::WP_Widget($this->id_base, $this->widget_name, $widget_ops, $control_options);
     }
     
     /**
