@@ -106,7 +106,7 @@ class Dropzone_Widget extends WP_Widget {
         extract($instance);
         
         //register_sidebar($args);
-        $sidebar_uid = WPDZ_Sidebar::get_sidebar_id($instance['wpdz_dropzone_type'] . _ . $this->number);
+        $sidebar_uid = WPDZ_Sidebar::get_sidebar_id($instance['wpdz_dropzone_type'] . '_' . $this->number);
         
         
         
@@ -279,7 +279,8 @@ class Dropzone_Widget extends WP_Widget {
 
         foreach($fields as &$field){
             extract($field);
-            
+            $label = (!isset($label)) ? null : $label;
+            $options = (!isset($options)) ? null : $options;
             $this->form_field($field_id, $type, $label, $instance, $options);
         }
 
@@ -314,15 +315,16 @@ class Dropzone_Widget extends WP_Widget {
         if(!empty($label) && 'checkbox' != $type){ ?>
             <label for="<?php echo $this->get_field_id( $field_id ); ?>"><?php echo $label; ?>: </label> <?php
         }
+        $input_value = (isset($instance[$field_id])) ? $instance[$field_id] : '';
         switch ($type){
             
             case 'text': ?>
-                    <input type="text" id="<?php echo $this->get_field_id( $field_id ); ?>" style="<?php echo $style; ?>" class="widefat" name="<?php echo $this->get_field_name( $field_id ); ?>" value="<?php echo $instance[$field_id]; ?>" />
+                    <input type="text" id="<?php echo $this->get_field_id( $field_id ); ?>" style="<?php echo (isset($style)) ? $style : ''; ?>" class="widefat" name="<?php echo $this->get_field_name( $field_id ); ?>" value="<?php echo $input_value; ?>" />
                 <?php break;
             
             
             case 'hidden': ?>
-                    <input id="<?php echo $this->get_field_id( $field_id ); ?>" type="hidden" style="<?php echo $style; ?>" class="widefat" name="<?php echo $this->get_field_name( $field_id ); ?>" value="<?php echo $instance[$field_id]; ?>" />
+                    <input id="<?php echo $this->get_field_id( $field_id ); ?>" type="hidden" style="<?php echo (isset($style)) ? $style : ''; ?>" class="widefat" name="<?php echo $this->get_field_name( $field_id ); ?>" value="<?php echo $input_value; ?>" />
                 <?php break;
             
             case 'select': ?>
@@ -330,7 +332,7 @@ class Dropzone_Widget extends WP_Widget {
                         <?php
                             foreach ( $options as $value => $label ) :  ?>
                         
-                                <option value="<?php echo $value; ?>" <?php selected($value, $instance[$field_id]) ?>>
+                                <option value="<?php echo $value; ?>" <?php selected($value, $input_value) ?>>
                                     <?php echo $label ?>
                                 </option><?php
                                 
@@ -345,7 +347,7 @@ class Dropzone_Widget extends WP_Widget {
                 $rows = (isset($options['rows'])) ? $options['rows'] : '16';
                 $cols = (isset($options['cols'])) ? $options['cols'] : '20';
                 
-                ?>                    <textarea class="widefat" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>" id="<?php echo $this->get_field_id($field_id); ?>" name="<?php echo $this->get_field_name($field_id); ?>"><?php echo $instance[$field_id]; ?></textarea>
+                ?>                    <textarea class="widefat" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>" id="<?php echo $this->get_field_id($field_id); ?>" name="<?php echo $this->get_field_name($field_id); ?>"><?php echo $input_value; ?></textarea>
                 <?php break;
             
             case 'radio' :
