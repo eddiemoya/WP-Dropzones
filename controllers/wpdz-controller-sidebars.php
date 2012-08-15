@@ -330,8 +330,10 @@ function dynamic_sidebar($index = 1) {
         $widget_num = $widget_obj['params'][0]['number'];
 
         $classes[] = $widget_opt[$widget_num]['span'];
-        $classes[] = $widget_opt[$widget_num]['widget_classname'];
-        
+
+        if(isset($widget_opt[$widget_num]['widget_classname'])){
+            $classes[] = $widget_opt[$widget_num]['widget_classname'];
+        }
         if(isset($widget_opt[$widget_num]['border-left']))
             $classes[] = 'border-left';
         
@@ -369,6 +371,8 @@ function dynamic_sidebar($index = 1) {
 
         foreach($fields as &$field){
             extract($field);
+            $label = (!isset($label)) ? null : $label;
+            $options = (!isset($options)) ? null : $options;
             
             self::form_field($widget, $field_id, $type, $label, $instance, $options, $group);
         }
@@ -412,7 +416,7 @@ function dynamic_sidebar($index = 1) {
             
             
             case 'hidden': ?>
-                    <input id="<?php echo $widget->get_field_id( $field_id ); ?>" type="hidden" style="<?php echo $style; ?>" class="widefat" name="<?php echo $widget->get_field_name( $field_id ); ?>" value="<?php echo $instance[$field_id]; ?>" />
+                    <input id="<?php echo $widget->get_field_id( $field_id ); ?>" type="hidden" style="<?php echo (isset($style)) ? $style : ''; ?>" class="widefat" name="<?php echo $widget->get_field_name( $field_id ); ?>" value="<?php echo $instance[$field_id]; ?>" />
                 <?php break;
             
             case 'select': ?>
@@ -420,7 +424,7 @@ function dynamic_sidebar($index = 1) {
                         <?php
                             foreach ( $options as $value => $label ) :  ?>
                         
-                                <option value="<?php echo $value; ?>" <?php selected($value, $instance[$field_id]) ?>>
+                                <option value="<?php echo $value; ?>" <?php if(isset($instance[$field_id])) selected($value, $instance[$field_id]) ?>>
                                     <?php echo $label ?>
                                 </option><?php
                                 

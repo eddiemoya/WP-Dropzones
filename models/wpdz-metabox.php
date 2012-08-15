@@ -85,7 +85,9 @@ class WPDZ_Metabox {
             return;
 
         foreach ((array) $this->options as $key => $option) {
-            update_post_meta($post_id, $key, $_POST[$key]);
+            if(isset($_POST[$key])){
+                update_post_meta($post_id, $key, $_POST[$key]);
+            }
         }
     }
 
