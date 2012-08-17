@@ -84,7 +84,9 @@ class WPDZ_Sidebar {
         
         //Get this sidebars widgets.
         $sidebars  = $this->get_sidebar_widgets(); 
-        $this->widgets = $sidebars[$this->id];   
+
+        if(isset($sidebars[$this->id]))
+            $this->widgets = $sidebars[$this->id];   
         
     }
  
