@@ -96,8 +96,10 @@ class WPDZ_Controller_Sidebars {
      * @return void
      */
     private function register_sidebars($metabox){
-        foreach((array)self::$sidebar_settings[$metabox] as $settings){
-            self::$sidebars[$metabox][] = new WPDZ_Sidebar($settings);
+        if(isset(self::$sidebar_settings[$metabox])){
+            foreach((array)self::$sidebar_settings[$metabox] as $settings){
+                self::$sidebars[$metabox][] = new WPDZ_Sidebar($settings);
+            }
         }
     }
     
