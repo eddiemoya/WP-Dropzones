@@ -127,8 +127,10 @@ class WPDZ_Metabox {
     public function get_option_value($key){
         global $post;
         
-        if(is_admin()){ $post_id = $_REQUEST['post']; } 
-        else { $post_id = $post->ID;}
+        if(is_admin() && isset($_REQUEST['post']))
+            { $post_id = $_REQUEST['post']; } 
+        else 
+            { $post_id = $post->ID;}
         
         return get_post_meta($post_id, $key, true);
     }
