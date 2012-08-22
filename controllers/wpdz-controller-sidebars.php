@@ -116,8 +116,8 @@ class WPDZ_Controller_Sidebars {
                 'name' => 'Dropzones',
                 'id' => 'layout-manager',
                 'description' => 'Use this area to control this pages layout',
-                'before_widget' => '<ul class="dropzone">',
-                'after_widget' => '</ul>',
+                'before_widget' => '<ul class="dropzone"><article class="##borders##">',
+                'after_widget' => '</article></ul>',
                 'before_title' => '<h4>',
                 'after_title' => '</h4>'
             );
@@ -335,19 +335,24 @@ function dynamic_sidebar($index = 1) {
         $widget_num = $widget_obj['params'][0]['number'];
 
         $classes[] = $widget_opt[$widget_num]['span'];
+        $borders['left'] = '';
+        $borders['right'] = '';
 
         if(isset($widget_opt[$widget_num]['widget_classname'])){
             $classes[] = apply_filters('widgetpress_widget_classname', $widget_opt[$widget_num]['widget_classname']);
         }
-        if(isset($widget_opt[$widget_num]['border-left']))
-            $classes[] = 'border-left';
+
+        if(isset($widget_opt[$widget_num]['border-left']) && $widget_opt[$widget_num]['border-left'] == 'on' )
+            $borders['left'] = 'border-left';
         
         if(isset($widget_opt[$widget_num]['border-right']))
-            $classes[] = "border-left";
+            $borders['right'] = "border-left";
 
         if ( isset($classes) && !empty($classes) )
             $classes = implode(' ',$classes);
             $params[0]['before_widget'] = preg_replace( '/class="/', "class=\"{$classes} ", $params[0]['before_widget'], 1 );
+            $params[0]['before_widget'] = str_replace( "##borders##" , $borders['left'] . ' ' . $borders['right'] , $params[0]['before_widget'] );
+            
 
         return apply_filters('widgetpress_add_classes', $params);
     }
