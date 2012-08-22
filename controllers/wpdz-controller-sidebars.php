@@ -326,6 +326,9 @@ function dynamic_sidebar($index = 1) {
 
     public function add_classes( $params ) {
         global $wp_registered_widgets;
+
+        $params = apply_filters('widgetpress_pre_add_classes', $params);
+
         $widget_id  = $params[0]['widget_id'];
         $widget_obj = $wp_registered_widgets[$widget_id];
         $widget_opt = get_option($widget_obj['callback'][0]->option_name);
@@ -334,7 +337,7 @@ function dynamic_sidebar($index = 1) {
         $classes[] = $widget_opt[$widget_num]['span'];
 
         if(isset($widget_opt[$widget_num]['widget_classname'])){
-            $classes[] = $widget_opt[$widget_num]['widget_classname'];
+            $classes[] = apply_filters('widgetpress_widget_classname', $widget_opt[$widget_num]['widget_classname']);
         }
         if(isset($widget_opt[$widget_num]['border-left']))
             $classes[] = 'border-left';
@@ -346,7 +349,7 @@ function dynamic_sidebar($index = 1) {
             $classes = implode(' ',$classes);
             $params[0]['before_widget'] = preg_replace( '/class="/', "class=\"{$classes} ", $params[0]['before_widget'], 1 );
 
-        return $params;
+        return apply_filters('widgetpress_add_classes', $params);
     }
 
 
