@@ -20,12 +20,17 @@ include (WPDZ_WIDGETS . 'dropzone-widget/dropzone-widget.php');
 include (WPDZ_CONTROLLERS . 'wpdz-controller-core.php');
 include (WPDZ_CONTROLLERS . 'wpdz-controller-metaboxes.php');
 include (WPDZ_CONTROLLERS . 'wpdz-controller-sidebars.php');
+include (WPDZ_CONTROLLERS . 'wpdz-controller-widgets.php');
 include (WPDZ_MODELS . 'wpdz-metabox.php');
 include (WPDZ_MODELS . 'wpdz-metabox-settings.php');
 include (WPDZ_MODELS . 'wpdz-metabox-sidebars.php');
 include (WPDZ_MODELS . 'wpdz-metabox-dropzones.php');
 include (WPDZ_MODELS . 'wpdz-sidebar.php');
 include (WPDZ_PATH   . 'functions.php');
+
+
+WPDZ_Controller_Widgets::init();
+
 
 Dropzone_Widget::register_widget();
 
