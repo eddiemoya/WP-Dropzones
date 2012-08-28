@@ -158,6 +158,7 @@ class WPDZ_Controller_Sidebars {
         }
         
         foreach ((array) $widgets as $slug => $widget) {
+            if(isset($widget['callback'])){
             $widget_obj = $widget['callback'][0];
 
             if (is_object($widget_obj)) {
@@ -168,6 +169,7 @@ class WPDZ_Controller_Sidebars {
                     $dropzones[$slug] = $widget_settings[$number]['args'];
                     $dropzones[$slug]['id'] .= '_' . $number;
                 }
+            }
             }
         }
         return $dropzones;
