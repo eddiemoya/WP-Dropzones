@@ -2,7 +2,7 @@
 /**
  * 
  */
-class WPDZ_Model_Widget {
+class WPDZ_Widget {
 
 	/**
 	 * The id of this widget instance.
@@ -31,7 +31,8 @@ class WPDZ_Model_Widget {
 	/**
 	 * 
 	 */
-	public function __construct($widget_classname){
+	public function __construct($widget_classname, $post_id = null){
+		//$this->post_id;
 		$this->instance = new $widget_classname();
 	}
 
