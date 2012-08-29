@@ -2,35 +2,46 @@
 
 class WidgetPress_Controller_Dropzones {
 
-	//pubic
+	private $layout_args;
+
+	private $dropzone_args;
 
 	/**
 	 * 
 	 */
 	public function init(){
+		self::action_hooks();
+
+
+
+
+	}
+
+	private function action_hooks(){
 
 		do_action('widgetpress_init');
 
-		//add_action( 'save_post',		array(__CLASS__, 'publish_layout') );
-		add_action( 'created_layout',	array(__CLASS__, 'insert_layout_post'));
-		add_action('init', 				array(__CLASS__, 'register'));
+		add_action( 'init', 			array(__CLASS__, 'register'));
+		add_action( 'created_layout',	array(__CLASS__, 'create_layout'));
+		add_action( 'created_dropzone',	array(__CLASS__, 'create_dropzone'));
+	}
+	/**
+	 * 
+	 */
+	public function create_layout($term_id, $tt_id = null){
 
+		$layout = new WidgetPress_Model_Dropzone();
+		$layout->create_dropzone($term_id, $tax_id, 'layout');
 	}
 
+	/**
+	 * 
+	 */
+	public function create_dropzone($term_id, $tt_id = null, $type = 'dropzone'){
 
-	public function insert_layout_post($term_id, $tax_id = null){
-
-		$layout_term = get_term($term_id, 'layout');
-
-		$layout_id = wp_insert_post(array(
-			'post_type' => 'layout',
-			'post_title' => 'Layout: '.$layout_term->name,
-			'post_name'	=> $layout_term->slug,
-			'post_status' => 'publish',
-			'tax_input'		=> array( 'layout' , $term_id )
-		));
+		$dropzone = new WidgetPress_Model_Dropzone();
+		$dropzone->create_dropzone($term_id, $tax_id, $type);
 	}
-
 
 	/**
 	 * 
@@ -55,7 +66,7 @@ class WidgetPress_Controller_Dropzones {
 			'search_items' 			=> __( 'Search Layouts' ),
 			'all_items' 			=> __( 'All Layouts' ),
 			'parent_item' 			=> __( 'Parent Layout' ),
-			'parent_item_colon'		=> __( 'Parent Layout:' ),
+			'parent_item_colon'		=> __( 'Parent Layout: ' ),
 			'edit_item' 			=> __( 'Edit Layout' ), 
 			'update_item' 			=> __( 'Update Layout' ),
 			'add_new_item'			=> __( 'Add New Layout' ),
@@ -204,13 +215,4 @@ class WidgetPress_Controller_Dropzones {
 
 		register_post_type('dropzone', $args);
 	}
-
-
-
-
-	public function set_post_dropzone(){
-
-	}
-
-
 }
