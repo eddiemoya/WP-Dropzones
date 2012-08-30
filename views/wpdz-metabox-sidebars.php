@@ -1,6 +1,6 @@
 <div class="wrap">
-    <?php $metabox = $this->callback_args['metabox']; ?>
-    <?php if($metabox != 'layout-manager'){ ?>
+    <?php $dropzone_type = $this->callback_args['type']; ?>
+    <?php if($dropzone_type != 'layout'){ ?>
     <div class="widget-liquid-left">
         <div id="widgets-left">
             <div id="available-widgets" class="widgets-holder-wrap">
@@ -21,7 +21,15 @@
                     </p>
 
                     <div id="widget-list">
-                        <?php wp_list_widgets(); ?>
+                        <?php
+                            $widgets = WidgetPress_Controller_Widgets::get_widget_classes(); 
+                         
+                            foreach ($widgets as $widget){
+                                include(WPDZ_VIEWS . 'view-widget.php');
+                            } 
+                         ?>
+       
+                        
                     </div>
                     <br class="clear" />
                 </div>
@@ -31,7 +39,15 @@
     <?php } ?>
     <div class="widget-liquid-right">
         <div id="widgets-right">
-            <?php WPDZ_Controller_Sidebars::view($metabox); ?>
+            <?php 
+                $dropzones = WidgetPress_Controller_Dropzones::get_dropzones($dropzone_type);
+
+                if(!empty($dropzones)){
+                    foreach($dropzones as $dropzone){
+                        $dropzone->view('view-sidebar.php', $this->callback_args);
+                    }
+                }    
+             ?>
         </div>
     </div>
 
