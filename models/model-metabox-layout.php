@@ -15,7 +15,7 @@ class WPDZ_Metabox_Dropzones extends WPDZ_Metabox {
     /**
      * @var string 
      */
-    var $title = 'Dropzones Layout Manager';
+    var $title = 'Layout Manager';
   
     /**
      * @var string|array 
@@ -35,7 +35,10 @@ class WPDZ_Metabox_Dropzones extends WPDZ_Metabox {
     /**
      * @var array 
      */
-    var $callback_args = array('metabox' => "layout-manager");
+    var $callback_args = array(
+        'type'          => "layout", 
+        'description'   => 'Use this area to control this pages layout with the size and order of dropzones.'
+    );
     
     /**
      * @var type 

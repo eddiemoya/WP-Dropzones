@@ -2,12 +2,12 @@
 /**
  * 
  */
-class WPDZ_Widget {
+class WidgetPress_Model_Widget {
 
 	/**
-	 * The id of this widget instance.
+	 * The post object of this widget instance.
 	 */
-	private $post_id;
+	private $post;
 
 	/**
 	 * An object instance of the widget's class 
@@ -15,7 +15,7 @@ class WPDZ_Widget {
 	 * - not to be confused with the $instance variable used within widget development
 	 * used to contain a widgets values
 	 */
-	private $instance;
+	private $widget;
 
 	/**
 	 * For convenience - an array of the meta value names.
@@ -27,13 +27,33 @@ class WPDZ_Widget {
 	 */
 	private $options = array();
 
+	/**
+	 * 
+	 */
+	private $widget_class;
+
 
 	/**
 	 * 
 	 */
-	public function __construct($widget_classname, $post_id = null){
-		//$this->post_id;
-		$this->instance = new $widget_classname();
+	public function __construct($post = null, $term = null, $widget_class = null){
+
+
+		if(is_null($post) && !is_null($term)){
+			$this->insert_post($term);
+		}
+
+		//$widget_classname = $this->get_widget_class();
+		$this->post = (is_object($post)) ? $post : get_post($post);
+
+		if(!is_null($widget_class)){
+			$this->widget_class = $widget_class;
+		}
+
+		if(!is_null($this->widget_class)){
+			$this->widget = new $widget_class();
+		}
+		//
 	}
 
 	/**
@@ -42,7 +62,7 @@ class WPDZ_Widget {
 	public function update_options($new_options){
 
 		//Run these options through the widgets update() method.
-		$new_options = $this->instance->update($new_options, $this->options);
+		$new_options = $this->widget->update($new_options, $this->options);
 
 
 		if(!empty($new_options)) {
@@ -54,6 +74,19 @@ class WPDZ_Widget {
 
 	}
 
+	/**
+	 * Simple getter for dropzone properties.
+	 */
+	public function get($property){
+		return $this->$property;
+	}
+
+	/**
+	 * Setter
+	 */
+	protected function set($property, $value){
+			$this->$property = $value;
+	}
 
 	/**
 	 * 
@@ -65,9 +98,7 @@ class WPDZ_Widget {
 	/**
 	 * 
 	 */
-	public function get_post_id(){
-		return $this->post_id;
-	}
+
 
 	public function add_to_sidebar($sidebar_id){
 		wp_set_post_terms($this->post_id, $sidebr_id, 'sidedebar' );
@@ -95,15 +126,17 @@ class WPDZ_Widget {
 	/**
 	 * 
 	 */
-	private function insert_post(){
+	private function insert_post($term){
 
-		$post_args = array(
-			'post_type' => 'widget'
-			//'post_parent' => [ <post ID> ] //Sets the parent of the new post.
-			//'tax_input' => [ array( 'taxonomy_name' => array( 'term', 'term2', 'term3' ) ) ] // support for custom taxonomies. 
-		);  
+		$tax = get_taxonomy('dropzone');
 
-		$this->post_id = wp_insert_post($post_args);
+		$post_id = wp_insert_post(array(
+			'post_status' 	=> 'publish',
+			'post_type' 	=> 'widget',
+			'tax_input'		=> array( 'dropzone' => array($term_id) )
+		));
+
+		return wp_insert_post($post_args);
 
 	}
 

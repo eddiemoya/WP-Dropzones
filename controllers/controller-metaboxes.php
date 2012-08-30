@@ -39,7 +39,7 @@ class WPDZ_Controller_Metaboxes {
     private function create_metaboxes() {
         
         self::$metaboxes['settings']    = new WPDZ_Metabox_Settings();
-        self::$metaboxes['sidebars']    = new WPDZ_Metabox_Sidebars();
+        self::$metaboxes['layout']      = new WPDZ_Metabox_Sidebars();
         self::$metaboxes['dropzones']   = new WPDZ_Metabox_Dropzones();
     }
 

@@ -15,7 +15,7 @@ class WPDZ_Metabox_Sidebars extends WPDZ_Metabox {
     /**
      * @var string 
      */
-    var $title = 'Widgets';
+    var $title = 'Dropzones';
   
     /**
      * @var string|array 
@@ -35,7 +35,7 @@ class WPDZ_Metabox_Sidebars extends WPDZ_Metabox {
     /**
      * @var array 
      */
-    var $callback_args = array('metabox' => 'sidebars');
+    var $callback_args = array('type' => 'dropzone', 'description' => 'Drop widgets into this area and edit their settings.');
     
     /**
      * @var string
