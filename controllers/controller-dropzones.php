@@ -2,19 +2,12 @@
 
 class WidgetPress_Controller_Dropzones {
 
-	private $layout_args;
-
-	private $dropzone_args;
 
 	/**
 	 * 
 	 */
 	public function init(){
 		self::action_hooks();
-
-
-
-
 	}
 
 	private function action_hooks(){
@@ -25,22 +18,69 @@ class WidgetPress_Controller_Dropzones {
 		add_action( 'created_layout',	array(__CLASS__, 'create_layout'));
 		add_action( 'created_dropzone',	array(__CLASS__, 'create_dropzone'));
 	}
+
 	/**
 	 * 
 	 */
 	public function create_layout($term_id, $tt_id = null){
-
-		$layout = new WidgetPress_Model_Dropzone();
-		$layout->create_dropzone($term_id, $tax_id, 'layout');
+		$layout = new WidgetPress_Model_Dropzone($term_id, null, 'layout');
 	}
 
 	/**
 	 * 
 	 */
 	public function create_dropzone($term_id, $tt_id = null, $type = 'dropzone'){
+		$dropzone = new WidgetPress_Model_Dropzone($term_id, null, $type);
+	}
 
-		$dropzone = new WidgetPress_Model_Dropzone();
-		$dropzone->create_dropzone($term_id, $tax_id, $type);
+	/**
+	 * 
+	 */
+	public function get_dropzones($type = 'dropzone', $post_id = null){
+
+		$terms =  get_the_terms( self::post_id($post_id), $type );
+		$terms = ($type == 'layout') ? array($terms[0]) : $terms;
+		
+		$dropzones = array();
+
+		if(!empty($terms)){
+
+			foreach((array)$terms as $term){
+
+				$post = get_posts(
+					array(
+						'post_type' => $type,
+						'posts_per_page' => 1,
+						'tax_query' => array(
+							array(
+								'taxonomy' => $type,
+								'field' => 'id',
+								'terms' => array($term->term_id)
+					))));
+			
+				$dropzones[] = new WidgetPress_Model_Dropzone($term, $post, $type);
+			} 
+		} else {
+
+			$dropzones = false;
+		}
+		
+
+		return $dropzones;
+	}
+
+	/**
+	 * 
+	 */
+	private function post_id($post_id = null){
+		if(is_null($post_id)){
+			global $post_id;
+
+			if(empty($post_id)){
+				$post_id = $_REQUEST['post_id'];
+			}
+		}
+		return $post_id;
 	}
 
 	/**
