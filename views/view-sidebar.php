@@ -24,7 +24,8 @@
                 $widgets = WidgetPress_Controller_Dropzones::get_dropzones('dropzone');
             }
 
-                foreach((array)$widgets as $widget) {
+                foreach ((array)$widgets as $widget){
+                    $widget->get('class')->widget_ID = $widget->get('post')->ID;
                     $widget = $widget->get('class');
                     include(WPDZ_VIEWS . 'view-widget.php');
                 }

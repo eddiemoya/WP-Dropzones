@@ -23,13 +23,12 @@ class WidgetPress_Model_Widget {
 	 */
 	public function __construct($post = null, $term = null, $class = null){
 
-;
-
+	
 		if(is_null($post) && !is_null($term)){
 			$this->post = $this->create_widget($term, $class);
 		} else {
-			//$gpost = $GLOBALS['post'];
-			//unset($GLOBALS['post']);
+			// $gpost = $GLOBALS['post'];
+			// unset($GLOBALS['post']);
 			$this->post = (is_object($post)) ? $post : get_post($post);
 			//$GLOBALS['post'] = $gpost;
 		}
@@ -68,6 +67,15 @@ class WidgetPress_Model_Widget {
 		}
 
 		return $this;
+	}
+
+	public function update($instance){
+
+		$this->update_options($instance);
+
+		$instance = $this->class->update($instance, $this->meta);
+
+		$this->class->form($instance);
 	}
 
 	private function set_widget_class($default_class = null){
@@ -116,12 +124,13 @@ class WidgetPress_Model_Widget {
 		unset($meta['_edit_last']);
 
 		//get post custom sometiems returns oddly structured arrays. This cleans it up. most of the time.
-		foreach($meta as &$m){
-			if(is_array($m)){
-				$m = $m[0];
+		if(!empty($meta)){
+			foreach($meta as &$m){
+				if(is_array($m)){
+					$m = $m[0];
+				}
 			}
 		}
-
 
 		$this->meta = $meta;
 	}
@@ -136,6 +145,36 @@ class WidgetPress_Model_Widget {
 	public function remove_from_drozone($dropzone_id){
 
 	}
+
+	/**
+	 * 
+	 */
+	public function update_options($new_options){
+
+		//Run these options through the widgets update() method.
+		$new_options = $this->class->update($new_options, $this->meta);
+
+
+		if(!empty($new_options)) {
+			$this->meta = $new_options;
+			foreach($new_options as $option => $value){
+				$this->update_option($option, $value);
+				update_post_meta($this->post->ID, $option, $value);
+			}
+		}
+
+	}
+	/**
+	 * 
+	 */
+	private function update_option($key, $value, $prefix = 'widgetpress_'){
+
+		$previous_value = (isset($this->meta[$key])) ? $this->meta[$key] : null ;
+
+		update_post_meta($this->post->ID, $key, $value, $previous_value);
+		$this->meta[$key] = $value;
+	}
+
 }
 
 /**

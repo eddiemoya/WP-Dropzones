@@ -15,8 +15,28 @@ class WidgetPress_Controller_Widgets {
 	public function add_actions(){
 		add_action('init', array(__CLASS__,'register_post_type') );
 		add_action('widgets_init', array(__CLASS__, 'get_all_widgets'), 100);
+		add_action('wp_ajax_widgetpress_save_widget', array(__CLASS__, 'save_widget_meta'));
 	}
 
+	public function save_widget_meta(){
+		
+		$widget_ID = $_POST['widget_ID'];
+		$widget_class = $_POST['widget_class'];
+		$meta = array_values(wp_parse_args(urldecode($_POST['meta'])));
+		$meta = $meta[0];
+		$metadata = array();
+		foreach($meta as $index => $kvpair){
+
+			foreach($kvpair as $key => $value){
+				$metadata[$key] = $value;
+			}
+
+		}
+
+		$widget = new WidgetPress_Model_Widget($widget_ID, null, $widget_class);
+		$widget->update($metadata);
+		//echo "<pre>";print_r($metadata);echo "</pre>";
+	}
 	/**
 	 * 
 	 */

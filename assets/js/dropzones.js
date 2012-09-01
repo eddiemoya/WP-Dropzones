@@ -220,37 +220,29 @@ var wmbWidgets;
             //widget = '<form action="" method="post">' + widget + '</div>';
             //$('.widget-inside > *', widget).wrapAll('<form action="" method="post" />');
      
-            var sb = widget.closest('div.widgets-sortables').attr('id'), data = widget.find('form').serialize(), a;
+            var sb = widget.closest('div.widgets-sortables').attr('id'), form = widget.find('form .widget-content input').serialize(), a;
             //$('<form action="" method="post>').replaceAll('.widget-inside' , widget);
             //console.log(data);
-            widget = $(widget);
+            //widget = $(widget);
+
                 
             $('.ajax-feedback', widget).css('visibility', 'visible');
 
-            a = {
-                action: 'save-widget',
+            var data = {
+                action: 'widgetpress_save_widget',
                 savewidgets: $('#_wpnonce_widgets').val(),
-                sidebar: sb,
 
-                post_id: $('#post_ID').val()
-//                id_base: $('.id_base', widget).val(),
-//                widget_number: $('.widget_number', widget).val(),
-//                multi_number: $('.multi_number', widget).val(),
-//                'widget-id' : $('.widget-id', widget).val(),
-//                'widget-height' : $('.widget-height', widget).val(),
-//                'widget-width' : $('.widget-width', widget).val()
-                
+                widget_ID: $('.widget_ID', widget).val(),
+                widget_class: $('.widget-class' , widget).val(),
+                meta: form    
             };
-            // console.log(a);
+             //console.log(a);
             if ( del )
                 a['delete_widget'] = 1;
-            var data2 = data;
 
-            data += '&' + $.param(a);
-            var b = a;
-            b.action = 'wpdz-save-widget';
-            data2 += '&' + $.param(b);
             
+            //console.log(data);
+
             function widget_saved(r){
                 var id;
 
@@ -292,11 +284,7 @@ var wmbWidgets;
             }
                 
             $.post( ajaxurl, data, function(r){
-                widget_saved(r);
-                $.post( ajaxurl, data2, function(t){
-                    //console.log(t)
-                });
-                    
+                widget_saved(r);                    
             });
               
         },

@@ -1,13 +1,14 @@
 <?php 
 
-
+/**
+ * Note to self. Whenever using ->form(), it needs to be through the models ->update() so that $instance can be passed, be it from ajax or from post custom.
+ */
 $options = (object)$widget->widget_options; 
-$widget_class = get_class($widget); 
+//$ID = $widget->widget_ID;
 
-$widget = new $widget_class();
-//echo "<pre>";print_r($widget);echo "</pre>"; 
+echo "<pre>";print_r($widget);echo "</pre>"; 
 
-if(is_subclass_of($widget_class, 'WP_Widget')){ 
+
 	?>
 
 	<div id="widget-" class="widget ui-draggable"> 
@@ -40,6 +41,7 @@ if(is_subclass_of($widget_class, 'WP_Widget')){
 	            <input type="hidden" name="add_new" class="add_new" value="multi">
 	            <input type="hidden" name="classname" class="classname" value="<?php echo $options->classname; ?>">
 	            <input type="hidden" name="widget-class" class="widget-class" value="<?php echo $widget_class; ?>">
+	            <input type="hidden" name="widget_ID" class="widget_ID" value="<?php echo $widget->widget_ID; ?>">
 
 	            <div class="widget-control-actions">
 	                <div class="alignleft">
@@ -59,4 +61,3 @@ if(is_subclass_of($widget_class, 'WP_Widget')){
 	        <?php echo $options->description; ?>
 	    </div>
 	</div>
-<?php }
