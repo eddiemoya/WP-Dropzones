@@ -22,14 +22,13 @@
 
                     <div id="widget-list">
                         <?php
-                            $widgets = WidgetPress_Controller_Widgets::get_widget_classes(); 
-                         
-                            foreach ($widgets as $widget){
+                            $widgets = WidgetPress_Controller_Widgets::$widgets; 
+
+                                foreach ((array)$widgets as $widget){
+                                $widget = $widget->get('class');
                                 include(WPDZ_VIEWS . 'view-widget.php');
                             } 
                          ?>
-       
-                        
                     </div>
                     <br class="clear" />
                 </div>

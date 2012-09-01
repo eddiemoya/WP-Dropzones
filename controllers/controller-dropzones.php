@@ -23,7 +23,7 @@ class WidgetPress_Controller_Dropzones {
 	 * 
 	 */
 	public function create_layout($term_id, $tt_id = null){
-		$layout = new WidgetPress_Model_Dropzone($term_id, null, 'layout');
+		$layout = new WidgetPress_Model_Dropzone($term_id, null, 'layout', 'Dropzone_Widget');
 	}
 
 	/**

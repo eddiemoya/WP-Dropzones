@@ -1,7 +1,7 @@
 <?php 
 
 class WidgetPress_Controller_Widgets {
-
+	static public $widgets;
 	/**
 	 * 
 	 */
@@ -14,6 +14,7 @@ class WidgetPress_Controller_Widgets {
 	 */
 	public function add_actions(){
 		add_action('init', array(__CLASS__,'register_post_type') );
+		add_action('widgets_init', array(__CLASS__, 'get_all_widgets'), 100);
 	}
 
 	/**
@@ -37,23 +38,21 @@ class WidgetPress_Controller_Widgets {
 	}
 
 	/**
-	 * Horrible. I am shame - copied and stripped down from the depths of WordPress core.
+	 * 
 	 */
-	public function get_widget_classes(){
-		global $wp_registered_widgets;//, $sidebars_widgets, $wp_registered_widget_controls;
+	public function get_all_widgets(){
 
-		$sort = $wp_registered_widgets;
-		usort( $sort, create_function( '$a, $b', 'return strnatcasecmp( $a["name"], $b["name"] );' ) );
-		$done = array();
+		global $wp_widget_factory;
+		$widgets = $wp_widget_factory->widgets;
 
-		foreach ( $sort as $widget ) {
-			if ( in_array( $widget['callback'], $done, true ) ) // We already showed this multi-widget
-				continue;
+		usort( $widgets, create_function( '$a, $b', 'return strnatcasecmp( $a->name, $b->name );' ) );
 
-			$done[] = new $widget['callback'][0];
+		$all_widgets = array();
+		foreach($widgets as &$widget){
+			$all_widgets[] = new WidgetPress_Model_Widget(null, null, $widget);
 		}
 
-		return $done;
+		self::$widgets = $all_widgets;
 	}
 
 	public function get_widgets($dropzone_term, $tax = 'dropzone'){

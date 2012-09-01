@@ -5,18 +5,19 @@ $options = (object)$widget->widget_options;
 $widget_class = get_class($widget); 
 
 $widget = new $widget_class();
-echo "<pre>";print_r($widget);echo "</pre>"; 
+//echo "<pre>";print_r($widget);echo "</pre>"; 
 
 if(is_subclass_of($widget_class, 'WP_Widget')){ 
 	?>
 
-	<div id="" class="widget ui-draggable"> 
+	<div id="widget-" class="widget ui-draggable"> 
 	    <div class="widget-top">
 	        <div class="widget-title-action">
 	            <a class="widget-action hide-if-no-js" href="#available-widgets"></a>
 	            <a class="widget-control-edit hide-if-js" href="/wp-admin/widgets.php?editwidget_class=<?php echo $widget_class; ?>">
 	                <span class="edit">Edit</span>
-	                <span class="add">Add</span></a>
+	                <span class="add">Add</span>
+	            </a>
 	        </div>
 	        <div class="widget-title">
 	            <h4>

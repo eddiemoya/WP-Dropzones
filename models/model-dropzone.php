@@ -22,13 +22,18 @@ class WidgetPress_Model_Dropzone {
 	 */
 	private $meta;
 
+	private $class;
 	/**
 	 * 
 	 */
-	public function __construct($term = null, $post = null, $type = 'dropzone'){
+	public function __construct($term = null, $post = null, $type = 'dropzone', $default_widget = 'Dropzone_Widget'){
 
 		$this->type 	= $type;
-		$this->term 	= $term;
+		$this->term 	= (is_object($term)) ? $term : get_term($term, $type);
+
+		if(!empty($default_widget)){
+			$this->class = new $default_widget();
+		}
 
 		if(is_null($post)){
 			$this->post = $this->create_dropzone($this->term->term_id, $type);
@@ -39,6 +44,8 @@ class WidgetPress_Model_Dropzone {
 		if(!empty($this->post)){
 			$this->get_dropzone_meta();
 		}
+
+
 	}
 
 	/**
@@ -61,7 +68,7 @@ class WidgetPress_Model_Dropzone {
 	public function create_dropzone($term_id, $type = 'dropzone'){
 		if(!empty($term_id)){
 			$this->post = $this->insert_post($term_id, $type);
-			$this->meta = $this->set_dropzone_meta();
+			$this->meta = $this->get_dropzone_meta();
 		}
 
 		return $this;
@@ -90,12 +97,17 @@ class WidgetPress_Model_Dropzone {
 		include (WPDZ_VIEWS . $template);
 	}
 
+	public function form(){
+
+	}
+
 	/**
 	 * 
 	 */
 	private function get_dropzone_meta(){
 		$meta = get_post_custom($this->post->ID);
 		unset($meta['_edit_lock']);
+		unset($meta['_edit_last']);
 		$this->meta = $meta;
 	}
 

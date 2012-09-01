@@ -70,7 +70,7 @@ class WPDZ_Controller_Metaboxes {
         wp_register_style('widgets_metabox_styles', plugins_url('assets/css/widgets-metabox.css', dirname(__FILE__)));
         wp_enqueue_style('widgets_metabox_styles');
 
-        wp_register_script('save_widgets_metabox', plugins_url('assets/js/save-widgets.js', dirname(__FILE__)));
+        wp_register_script('save_widgets_metabox', plugins_url('assets/js/dropzones.js', dirname(__FILE__)));
         wp_enqueue_script('save_widgets_metabox');
 
         //Better if I moved this to the sidebar controller, but meh.
