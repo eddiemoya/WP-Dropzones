@@ -21,5 +21,5 @@ add_filter('wpdz_dropzones', 'add_dropzones');
  * Template Function to display a Dropzones container
  */
 function display_dropzones(){
-    WPDZ_Controller_Sidebars::display_dropzones();
+    WidgetPress_Controller_Widgets::display_dropzones();
 }

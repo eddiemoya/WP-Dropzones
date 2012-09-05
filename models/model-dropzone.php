@@ -31,9 +31,6 @@ class WidgetPress_Model_Dropzone {
 		$this->type 	= $type;
 		$this->term 	= (is_object($term)) ? $term : get_term($term, $type);
 
-		if(!empty($default_widget)){
-			$this->class = new $default_widget();
-		}
 
 		if(is_null($post)){
 			$this->post = $this->create_dropzone($this->term->term_id, $type);
@@ -44,6 +41,12 @@ class WidgetPress_Model_Dropzone {
 		if(!empty($this->post)){
 			$this->get_dropzone_meta();
 		}
+
+		if(!empty($default_widget)){
+			$this->class = new WidgetPress_Model_Widget(null, null, $default_widget);
+		}
+
+
 
 
 	}
@@ -98,6 +101,10 @@ class WidgetPress_Model_Dropzone {
 	}
 
 	public function form(){
+
+	}
+
+	public function update($data = null){
 
 	}
 

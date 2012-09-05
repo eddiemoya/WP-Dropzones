@@ -24,11 +24,8 @@
                         <?php
                             $widgets = WidgetPress_Controller_Widgets::$widgets; 
 
-                                foreach ((array)$widgets as $widget){
-                                $widget->get('class')->widget_ID = $widget->get('post')->ID;
-                                $widget = $widget->get('class');
-
-                                include(WPDZ_VIEWS . 'view-widget.php');
+                            foreach ((array)$widgets as $widget){
+                                include(WPDZ_VIEWS . 'view-admin-widget.php');
                             } 
                          ?>
                     </div>
@@ -42,10 +39,15 @@
         <div id="widgets-right">
             <?php 
                 $dropzones = WidgetPress_Controller_Dropzones::get_dropzones($dropzone_type);
+                if($dropzone_type == 'layout'){
+                   //echo "<pre>";print_r($dropzones);echo "</pre>";
+                }
+                
+                if(!empty($dropzones) && !is_wp_error($dropzones[0]->get('term'))){
 
-                if(!empty($dropzones)){
                     foreach($dropzones as $dropzone){
-                        $dropzone->view('view-sidebar.php', $this->callback_args);
+                        //$widget = $dropzone->get('class');
+                        $dropzone->view('view-admin-sidebar.php', $this->callback_args);
                     }
                 }    
              ?>

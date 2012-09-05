@@ -110,6 +110,61 @@ var wmbWidgets;
                     });
                 },
                 stop: function(e,ui) {
+                    var helper = $(ui.helper);
+                    var item   = $(ui.item);
+                    var type = $(this).data('type');
+
+                    if(type == 'layout'){
+                        add_action = 'widgetpress_add_dropzone';
+                    } else {
+                        add_action = 'widgetpress_add_widget';
+                    }
+                    //Only do this if this had no ID (aka, is a new widget, not a resort)
+                    if(item.find('.widget_ID').val() == ""){
+                        var data = {
+                            action:     add_action,
+                            widget_ID:  item.find('.widget_ID').val(),
+                            widget_class: item.find('.widget-class').val(),
+                            dropzone_type : $(this).data('type'),
+                            dropzone_id : $(this).data('id')
+                        };
+
+                        //console.log(data)
+                        $.post( ajaxurl, data, function(r){
+
+                            if(type == 'dropzone'){
+                                ui.item.find('.widget_ID').val(r) 
+                                wmbWidgets.save( ui.item, 0, 1, 0 ); // delete widget
+                            }
+                            //console.log(r)
+
+                        //ui.item.replaceWith(item);/               
+                        });
+                    }
+                    //console.log(ui.item);
+                    var dropzone_type = $(this).data('type');
+                    var dropzone_id = $(this).data('id');
+
+                    sb = $('.widget', this).sortable('toArray');
+                    //console.log(sb)
+                    sb.each(
+                        function(index){
+                            var orderdata = {
+                                action:     'widgetpress_sort_widget', 
+                                dropzone_type : dropzone_type,
+                                dropzone_id : dropzone_id,
+                                widget_ID:  $('.widget_ID', this).val(),
+                                order:    index
+                            }
+                            //console.log(index, orderdata)
+                            $.post( ajaxurl, orderdata, 
+                                function(r){
+                                    //console.log(r)
+                                }          
+                            );
+                        }
+                    );
+
                     if ( ui.item.hasClass('ui-draggable') && ui.item.data('draggable') )
                         ui.item.draggable('destroy');
 
@@ -156,11 +211,11 @@ var wmbWidgets;
                     if ( !$(this).is(':visible') || this.id.indexOf('orphaned_widgets') != -1 )
                         sender.sortable('cancel');
 
-                    if ( sender.attr('id').indexOf('orphaned_widgets') != -1 && !sender.children('.widget').length ) {
-                        sender.parents('.orphan-sidebar').slideUp(400, function(){
-                            $(this).remove();
-                        });
-                    }
+                    // if ( sender.attr('id').indexOf('orphaned_widgets') != -1 && !sender.children('.widget').length ) {
+                    //     sender.parents('.orphan-sidebar').slideUp(400, function(){
+                    //         $(this).remove();
+                    //     });
+                    // }
                 }
             }).sortable('option', 'connectWith', 'div.widgets-sortables').parent().filter('.closed').children('.widgets-sortables').sortable('disable');
 
@@ -170,6 +225,7 @@ var wmbWidgets;
                     return $(o).parent().attr('id') != 'widget-list';
                 },
                 drop: function(e,ui) {
+                    
                     ui.draggable.addClass('deleting');
                     $('#removing-widget').hide().children('span').html('');
                 },
@@ -214,34 +270,51 @@ var wmbWidgets;
             //wmbWidgets.refreshMetabox();
             
         },
-
+        //add_widget : function(data)
         save : function(widget, del, animate, order) {
              
             //widget = '<form action="" method="post">' + widget + '</div>';
             //$('.widget-inside > *', widget).wrapAll('<form action="" method="post" />');
-     
-            var sb = widget.closest('div.widgets-sortables').attr('id'), form = widget.find('form .widget-content input').serialize(), a;
+            var dz = widget.closest('div.widgets-sortables');
+            var sb = widget.closest('div.widgets-sortables').attr('id'), form = widget.find('form .widget-content input, form .widget-content select').serialize(), a;
             //$('<form action="" method="post>').replaceAll('.widget-inside' , widget);
             //console.log(data);
             //widget = $(widget);
 
-                
             $('.ajax-feedback', widget).css('visibility', 'visible');
 
+            
+            var action = '';
+            if($(dz).data('type') == 'layout'){
+                save_action = 'widgetpress_save_dropzone';
+
+            } else {
+                save_action = 'widgetpress_save_widget';
+            }
+
+            //var action = ()
             var data = {
-                action: 'widgetpress_save_widget',
+                action: save_action,
                 savewidgets: $('#_wpnonce_widgets').val(),
 
                 widget_ID: $('.widget_ID', widget).val(),
                 widget_class: $('.widget-class' , widget).val(),
-                meta: form    
+                widget_span: $('.widgetpress_span', widget).val(),
+                post_id : $('#post_ID').val(),
+                dropzone_type: $(dz).data('type'),
+                dropzone_id: $(dz).data('id'),
+                meta: form,
+                //type : dztype
             };
-             //console.log(a);
+            //var x = widget.find('form .widget-content input, form .widget-content select')
+             //console.log( $(x[0]).val() );
+
+
             if ( del )
                 a['delete_widget'] = 1;
 
             
-            //console.log(data);
+            console.log(data);
 
             function widget_saved(r){
                 var id;
@@ -282,8 +355,9 @@ var wmbWidgets;
                 
                 
             }
-                
+            
             $.post( ajaxurl, data, function(r){
+                //console.log(r)
                 widget_saved(r);                    
             });
               
@@ -297,7 +371,7 @@ var wmbWidgets;
             
             $.post(ajaxurl, object, function(r){
                 $('#wpdz-metabox-sidebars .inside .wrap').replaceWith(r);
-                console.log(r);
+               // console.log(r);
             });
             wmbWidgets.init();
         },

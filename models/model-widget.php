@@ -21,16 +21,18 @@ class WidgetPress_Model_Widget {
 	/**
 	 * 
 	 */
-	public function __construct($post = null, $term = null, $class = null){
+	public function __construct($post = null, $term = null, $class = null, $type = 'dropzone'){
 
-	
+		if(!is_null($term))
+			$term = (is_object($term)) ? $term : get_term($term, $type);
+
 		if(is_null($post) && !is_null($term)){
 			$this->post = $this->create_widget($term, $class);
 		} else {
-			// $gpost = $GLOBALS['post'];
-			// unset($GLOBALS['post']);
+			$gpost = $GLOBALS['post'];
+			unset($GLOBALS['post']);
 			$this->post = (is_object($post)) ? $post : get_post($post);
-			//$GLOBALS['post'] = $gpost;
+			$GLOBALS['post'] = $gpost;
 		}
 
 		if(!empty($this->post)){
@@ -38,6 +40,11 @@ class WidgetPress_Model_Widget {
 		}
 
 		$this->set_widget_class($class);
+
+
+		if(!is_null($term) && !is_null($post) && !has_term($term->term_id, $term->taxonomy, $post)){
+			//$this->add_to_dropzone($term->term_id, $term->taxonomy);
+		}
 
 
 
@@ -63,21 +70,36 @@ class WidgetPress_Model_Widget {
 	 */
 	public function create_widget($term_id, $class = null){
 		if(!empty($term_id)){
-			$this->post = $this->insert_post($term_id, $type);
+			$widget_post = $this->insert_post($term_id, $class);
 		}
 
-		return $this;
+		return $widget_post;
 	}
 
-	public function update($instance){
+	/**
+	 * 
+	 */
+	public function update($instance = null){
+		if(empty($instance)){
+			//$instance = apply_filters('widgetpress_update_filter', $this->meta, $instance);
+			$this->set_widget_meta();
+			$instance = $this->meta;
+		}
+
+		//$instance = apply_filters('widgetpress_update_filter', $instance, $this->meta);
 
 		$this->update_options($instance);
 
 		$instance = $this->class->update($instance, $this->meta);
 
 		$this->class->form($instance);
+
+		//$instance = apply_filters('widgetpress_after_form_fields', $instance, $this->class);
 	}
 
+	/**
+	 * 
+	 */
 	private function set_widget_class($default_class = null){
 		$class = $this->meta['widgetpress_widget_classname'];
 		//$this->class = new $class();
@@ -91,22 +113,36 @@ class WidgetPress_Model_Widget {
 			$class = $this->class;
 			$this->class = new $class();
 		}
+		//if(!is_null($default_class))
+			
 
 	}
 	/**
 	 * 
 	 */
-	private function insert_post($term_id){
+	private function insert_post($term, $widget_class = 'WP_Widget_Archives'){
 
 		$tax = get_taxonomy('dropzone');
 
 		$post_id = wp_insert_post(array(
 			'post_status' 	=> 'publish',
 			'post_type' 	=> 'widget',
-			'tax_input'		=> array( 'dropzone' => array($term_id) )
+			'post_name'		=> $term->slug,
+			'post_title' 	=> $term->name.': '.$widget_class,
+			'tax_input'		=> array( $term->taxonomy => array($term->term_id) )
 		));
 
-		return wp_insert_post($post_args);
+		
+
+
+		add_post_meta($post_id, 'widgetpress_widget_classname', $widget_class);
+		add_post_meta($post_id, "widgetpress_order_{$term->taxonomy}_{$term->term_id}", 0);
+
+		
+		
+
+
+		return get_post($post_id);
 
 	}
 
@@ -138,8 +174,8 @@ class WidgetPress_Model_Widget {
 	/**
 	 * 
 	 */
-	public function add_to_dropzone($dropzone_id){
-		wp_set_post_terms($this->post_id, $$dropzone_id, 'dropzone' );
+	public function add_to_dropzone($dropzone_id, $dropzone_type){
+		wp_set_post_terms($this->post_id, $dropzone_id, $dropzone_type );
 	}
 
 	public function remove_from_drozone($dropzone_id){

@@ -3,11 +3,23 @@
 /**
  * Note to self. Whenever using ->form(), it needs to be through the models ->update() so that $instance can be passed, be it from ajax or from post custom.
  */
-$options = (object)$widget->widget_options; 
+
+//$widget = $widget->get('class');
+$options = (object)$widget->get('class')->widget_options; 
 //$ID = $widget->widget_ID;
 
-echo "<pre>";print_r($widget);echo "</pre>"; 
+//echo "<pre>";print_r($widget);echo "</pre>"; 
+$meta = $widget->get('meta');
+$span = $meta['widgetpress_span'];
 
+$layout_span = null;
+
+if(is_object($dropzone) && empty($span)){
+	global $post_id; 
+	$id = (int)$dropzone->get('term')->term_id - 1;
+	$span = get_post_meta($post_id, 'widgetpress_dropzone_span_'.$id);
+	$span = $span[0];
+}
 
 	?>
 
@@ -22,7 +34,7 @@ echo "<pre>";print_r($widget);echo "</pre>";
 	        </div>
 	        <div class="widget-title">
 	            <h4>
-	                <?php echo $widget->name; ?>
+	                <?php echo $widget->get('class')->name; ?>
 	                <span class="in-widget-title"></span>
 	            </h4>
 	        </div>
@@ -32,16 +44,38 @@ echo "<pre>";print_r($widget);echo "</pre>";
 	        <form action="" method="post">
 	            <div class="widget-content">
 
-	                <?php $widget->form(array()); ?>
+	                <?php $widget->update(); ?>
+	                <?php //do_action('widgetpress_after_form_fields'); ?>
+	                <?php //$m = $widget->get('meta'); echo $m['widgetpress_order_dropzone_87']; //echo "<pre>";print_r($widget);echo "</pre>";
+					        $spans = array(
+					            'span12' => '100%',
+					            'span9' => '75%',
+					            'span8' => '66%',
+					            'span6' => '50%',
+					            'span4' => '33%',
+					            'span3' => '25%'
+					        );
+	                ?>
 	            </div>
-	            
+	      
+					<label for="widgetpress_span">Widget Width: </label>   
+                    <select id="widgetpress_span" class="widefat widgetpress_span" name="widgetpress_span">
+                        <?php
+                            foreach ($spans as $value => $label ) :  ?>
+                        
+                                <option value="<?php echo $value; ?>" <?php selected($value, $span); ?>>
+                                    <?php echo $label ?>
+                                </option><?php
+                                
+                            endforeach; 
+                        ?>
+                    </select>
+
+
 	            <input type="hidden" name="id_base" class="id_base" value="archives">
-	            <input type="hidden" name="widget-width" class="widget-width" value="250">
-	            <input type="hidden" name="widget-height" class="widget-height" value="200">
-	            <input type="hidden" name="add_new" class="add_new" value="multi">
 	            <input type="hidden" name="classname" class="classname" value="<?php echo $options->classname; ?>">
-	            <input type="hidden" name="widget-class" class="widget-class" value="<?php echo $widget_class; ?>">
-	            <input type="hidden" name="widget_ID" class="widget_ID" value="<?php echo $widget->widget_ID; ?>">
+	            <input type="hidden" name="widget-class" class="widget-class" value="<?php echo get_class($widget->get('class')); ?>">
+	            <input type="hidden" name="widget_ID" class="widget_ID" value="<?php echo $widget->get('post')->ID; ?>">
 
 	            <div class="widget-control-actions">
 	                <div class="alignleft">
