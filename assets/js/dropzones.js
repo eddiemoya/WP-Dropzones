@@ -293,7 +293,7 @@ var wmbWidgets;
             //widget = '<form action="" method="post">' + widget + '</div>';
             //$('.widget-inside > *', widget).wrapAll('<form action="" method="post" />');
             var dz = widget.closest('div.widgets-sortables');
-            var sb = widget.closest('div.widgets-sortables').attr('id'), form = widget.find('form .widget-content input, form .widget-content select').serialize(), a;
+            var sb = widget.closest('div.widgets-sortables').attr('id'), form = widget.find('form .widget-content input, form .widget-content select, form .widget-content textarea').serialize(), a;
             //$('<form action="" method="post>').replaceAll('.widget-inside' , widget);
             //console.log(data);
             //widget = $(widget);
@@ -324,7 +324,7 @@ var wmbWidgets;
                 //type : dztype
             };
             //var x = widget.find('form .widget-content input, form .widget-content select')
-             //console.log( $(x[0]).val() );
+             
 
 
             if ( del )
