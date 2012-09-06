@@ -106,7 +106,7 @@ class WidgetPress_Model_Widget {
 		if(!empty($class)){
 			$this->class = new $class();
 		} else {
-			$this->class = (!empty($default_class)) ? $default_class : null;
+			$this->class = (!empty($default_class)) ? $default_class : $class;
 		}
 
 		if(!is_object($this->class) && is_string($this->class)){

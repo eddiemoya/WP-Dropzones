@@ -336,8 +336,8 @@ class WidgetPress_Controller_Widgets {
  				foreach($widgets as $widget){
  					$meta = $widget->get('meta');
  					$span = $meta['widgetpress_span'];
- 					$classname = $meta['widgetpress_widget_classname'];
-
+ 					$classname = $widget->get('class')->widget_options['classname'];
+ 					//echo "<pre>";print_r($classname);echo "</pre>";
 	 
 	            	$before_widget = apply_filters('widgetpress_before_widget', "<article class='widget content-container {$span} {$classname}'>", $dropzone, $widget);
 					$after_widget = apply_filters('widgetpress_after_widget', "</article>", $dropzone, $widget);
