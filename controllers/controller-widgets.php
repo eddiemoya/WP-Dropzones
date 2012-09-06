@@ -315,31 +315,22 @@ class WidgetPress_Controller_Widgets {
         }
     }
 
+    /**
+     * Holy filters batman!
+     */
+	public function display_dropzones(){
 
-	public function display_dropzones($template = 'dropzones'){
-
-		ob_start();?>
-        	<section class="dropzones span12">
-        <?php $before_dropzones = apply_filters('widgetpress_before_dropzones', ob_get_clean(), $dropzone);
-
-        echo $before_dropzones;
-
+		echo apply_filters('widgetpress_before_dropzones_container', '<section class="dropzones span12">', $dropzone);
 
 		$dropzones = WidgetPress_Controller_Dropzones::get_dropzones('dropzone');
 		if(!empty($dropzones)){
             foreach($dropzones as $dropzone){
-
-            	//echo "<pre>";print_r($dropzone);echo "</pre>";
            
       			$dzmeta = $dropzone->get('meta');
 				$dzspan = $dzmeta['dropzone_span'];
-			
-
-            	ob_start();?>
-            		<section class="dropzone <?php echo $dropzone->get('term')->slug; ?> <?php echo $dzspan; ?>">
-            	<?php $before_dropzone = apply_filters('widgetpress_before_dropzone', ob_get_clean(), $dropzone);
-
-            	echo $before_dropzone;
+            	
+            	$before_dropzone = "<section class='dropzone {$dropzone->get('term')->slug} {$dzspan}''>";
+            	echo apply_filters('widgetpress_before_dropzone', $before_dropzone, $dropzone);
 
  				$widgets = WidgetPress_Controller_Widgets::get_widgets($dropzone->get('term'));
  				foreach($widgets as $widget){
@@ -362,34 +353,14 @@ class WidgetPress_Controller_Widgets {
 						'after_title' => $after_title
 					);
 
-
 	       			$widget->get('class')->widget($args, $meta);
 	            	//echo "<pre>";print_r($widget);echo "</pre>";
 
-
-
-
-	
-
-
-
-
  				}
-
-                ob_start();?>
-            		</section>
-            	<?php $after_dropzone = apply_filters('widgetpress_after_dropzone', ob_get_clean(), $dropzone);
-
-            	echo $after_dropzone;
+                echo  apply_filters('widgetpress_after_dropzone', "</section>", $dropzone);
             }
         } 
-
-        ob_start();?>
-    		</section>
-    	<?php $after_dropzones = apply_filters('widgetpress_after_dropzones', ob_get_clean(), $dropzone);
-
-    	echo $after_dropzones; 
-
+        echo apply_filters('widgetpress_after_dropzones_container', "</section>", $dropzone);
 	}
 
 }
