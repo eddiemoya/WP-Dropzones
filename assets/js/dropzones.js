@@ -4,6 +4,23 @@ var wmbWidgets;
 
 
         init : function() {
+            $('form.dropzone-settings').submit(function(e){
+                e.preventDefault();
+                var form = $(this).closest(".dropzone-settings");
+                
+                var data = {
+                    action: 'widgetpress_dropzone_settings',
+                    id : $('.dropzone_id', form).val(),
+                    type : $('.dropzone_type', form).val(),
+                    span: $('.widgetpress_dropzone_span', form).val()
+                }
+
+                $.post(ajaxurl, data, function(r){
+                   // console.log(r);
+                });
+                console.log(data);
+            })
+
             var rem, sidebars = $('div.widgets-sortables'), isRTL = !! ( 'undefined' != typeof isRtl && isRtl ),
             margin = ( isRtl ? 'marginRight' : 'marginLeft' ), the_id;
 

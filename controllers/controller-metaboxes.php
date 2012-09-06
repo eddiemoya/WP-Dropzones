@@ -40,7 +40,7 @@ class WPDZ_Controller_Metaboxes {
         
         self::$metaboxes['settings']    = new WPDZ_Metabox_Settings();
         self::$metaboxes['layout']      = new WPDZ_Metabox_Sidebars();
-        self::$metaboxes['dropzones']   = new WPDZ_Metabox_Dropzones();
+        //self::$metaboxes['dropzones']   = new WPDZ_Metabox_Dropzones();
     }
 
     /**

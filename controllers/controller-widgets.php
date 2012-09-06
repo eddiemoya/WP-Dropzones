@@ -99,7 +99,7 @@ class WidgetPress_Controller_Widgets {
 
 			$widgets_posts = get_posts(
 				array(
-					'post_type' => 'widget',
+					'post_type' => array('widget'),
 					'meta_key'	=> "widgetpress_order_".$tax."_".$term->term_id,
 					'orderby' 	=> 'meta_value_num',
 					'order'		=> 'ASC',
@@ -319,7 +319,7 @@ class WidgetPress_Controller_Widgets {
 	public function display_dropzones($template = 'dropzones'){
 
 		ob_start();?>
-        	<section class="dropzones">
+        	<section class="dropzones span12">
         <?php $before_dropzones = apply_filters('widgetpress_before_dropzones', ob_get_clean(), $dropzone);
 
         echo $before_dropzones;
@@ -330,11 +330,10 @@ class WidgetPress_Controller_Widgets {
             foreach($dropzones as $dropzone){
 
             	//echo "<pre>";print_r($dropzone);echo "</pre>";
-            	global $post;
-      			$id = (int)$dropzone->get('term')->term_id - 1;
-				$dzspan = get_post_meta($post->ID, 'widgetpress_dropzone_span_'.$id);
-				$dzspan = $dzspan[0];
-				//echo "<pre>";print_r($dzspan);echo "</pre>";
+           
+      			$dzmeta = $dropzone->get('meta');
+				$dzspan = $dzmeta['dropzone_span'];
+			
 
             	ob_start();?>
             		<section class="dropzone <?php echo $dropzone->get('term')->slug; ?> <?php echo $dzspan; ?>">

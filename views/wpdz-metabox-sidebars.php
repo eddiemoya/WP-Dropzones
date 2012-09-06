@@ -39,9 +39,8 @@
         <div id="widgets-right">
             <?php 
                 $dropzones = WidgetPress_Controller_Dropzones::get_dropzones($dropzone_type);
-                if($dropzone_type == 'layout'){
-                   //echo "<pre>";print_r($dropzones);echo "</pre>";
-                }
+    
+                //echo "<pre>";print_r($dropzones);echo "</pre>";
                 
                 if(!empty($dropzones) && !is_wp_error($dropzones[0]->get('term'))){
 

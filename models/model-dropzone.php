@@ -35,18 +35,22 @@ class WidgetPress_Model_Dropzone {
 		if(is_null($post)){
 			$this->post = $this->create_dropzone($this->term->term_id, $type);
 		} else {
+			$gpost = $GLOBALS['post'];
+			unset($GLOBALS['post']);
 			$this->post = (is_object($post)) ? $post : get_post($post);
+			$GLOBALS['post'] = $gpost;
 		}
 
+		//echo "<pre>";print_r($post);echo "</pre>";
 		if(!empty($this->post)){
 			$this->get_dropzone_meta();
 		}
 
 		if(!empty($default_widget)){
-			$this->class = new WidgetPress_Model_Widget(null, null, $default_widget);
+			//$this->class = new WidgetPress_Model_Widget(null, null, $default_widget);
 		}
 
-
+		//echo "<pre>";print_r($post);echo "</pre>";
 
 
 	}
@@ -112,9 +116,15 @@ class WidgetPress_Model_Dropzone {
 	 * 
 	 */
 	private function get_dropzone_meta(){
-		$meta = get_post_custom($this->post->ID);
+		$meta = get_post_meta($this->post->ID, '', false);
 		unset($meta['_edit_lock']);
 		unset($meta['_edit_last']);
+
+		foreach($meta as &$m){
+			if(is_array($m)){
+				$m = $m[0];
+			}
+		}
 		$this->meta = $meta;
 	}
 

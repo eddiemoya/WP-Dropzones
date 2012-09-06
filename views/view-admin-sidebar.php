@@ -1,5 +1,20 @@
+
+<?php 
+    $spans = array(
+        'span12' => '100%',
+        'span9' => '75%',
+        'span8' => '66%',
+        'span6' => '50%',
+        'span4' => '33%',
+        'span3' => '25%'
+    );
+
+    $meta = $this->get('meta');
+    $span = $meta['dropzone_span'];
+    //echo "<pre>";print_r($span);echo "</pre>";
+?>
 <div class="widgets-holder-wrap">
-    <?php //echo "<pre>";print_r($this);echo "</pre>";?>
+    
 	<div class="sidebar-name">
 
     	<div class="sidebar-name-arrow"><br /></div>
@@ -13,7 +28,32 @@
 	</div>
 	<div class="widgets-sortables ui-sortable" style="min-height: 50px; " data-id="<?php echo $this->get('term')->term_id ?>" data-type="<?php echo $this->get('term')->taxonomy;?>">
 
+
 		<div class="sidebar-description">
+
+            <form action="" class="dropzone-settings">
+
+                <label for="widgetpress_span">Widget Width: </label>   
+
+                <select id="widgetpress_dropzone_span" class="widefat widgetpress_dropzone_span" name="widgetpress_dropzone_span">
+                    <?php
+                        foreach ($spans as $value => $label ) :  ?>
+                    
+                            <option value="<?php echo $value; ?>" <?php selected($value, $span); ?>>
+                                <?php echo $label ?>
+                            </option><?php
+                            
+                        endforeach; 
+                    ?>
+                </select>
+                <input type="hidden" name="dropzone_id" class="dropzone_id" value="<?php echo $this->get('post')->ID; ?>" />
+                <input type="hidden" name="dropzone_id" class="dropzone_type" value="<?php echo $this->get('post')->post_type; ?>" />
+                <div class="alignright">
+                    <img src="http://com.loc/wp-admin/images/wpspin_light.gif" class="ajax-feedback" title="" alt="" style="visibility: hidden; ">
+                    <input type="submit" name="savedropzone" class="savedropzone" value="Save">
+                </div>
+            </form>
+
 			<p class="description"><?php echo $description; ?></p>
 		</div>
 	   
