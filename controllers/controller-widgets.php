@@ -337,12 +337,10 @@ class WidgetPress_Controller_Widgets {
  					$meta = $widget->get('meta');
  					$span = $meta['widgetpress_span'];
  					$classname = $widget->get('class')->widget_options['classname'];
- 					//echo "<pre>";print_r($classname);echo "</pre>";
 	 
 	            	$before_widget = apply_filters('widgetpress_before_widget', "<article class='widget content-container {$span} {$classname}'>", $dropzone, $widget);
 					$after_widget = apply_filters('widgetpress_after_widget', "</article>", $dropzone, $widget);
 
-	     
 	            	$before_title = apply_filters('widgetpress_before_title', "<header class='content-header'><h3>", $dropzone, $widget);
 					$after_title = apply_filters('widgetpress_after_title', "</h3></header>", $dropzone, $widget);
 
