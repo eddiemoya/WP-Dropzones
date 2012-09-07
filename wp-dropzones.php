@@ -3,7 +3,7 @@
 Plugin Name: WP Dropzones
 Plugin URI: http://wordpress.org/extend/plugins/wp-dropzones
 Description: Magical things that sound like fun, but might end badly.
-Version: 0.6 Alpha 5 (Docking)
+Version: 0.6 Alpha 5
 Author: Eddie Moya
 Author URI: http://eddiemoya.com
 */
@@ -31,23 +31,7 @@ include (WPDZ_MODELS 		. 'model-widget.php');
 include (WPDZ_PATH   		. 'functions.php');
 
 
-
-//include (WPDZ_CONTROLLERS 	. 'wpdz-controller-core.php');
-
-//include (WPDZ_CONTROLLERS 	. 'wpdz-controller-sidebars.php');
-//include (WPDZ_MODELS 		. 'model-sidebar.php');
-
-
-
-
-
 WPDZ_Controller_Metaboxes::init();
 WidgetPress_Controller_Dropzones::init();
 WidgetPress_Controller_Widgets::init();
-Dropzone_Widget::register_widget();
-
-if(is_admin()){
-	//WPDZ_Controller_Core::init();
-	//WPDZ_Controller_Sidebars::init();
-
-}
+//Dropzone_Widget::register_widget();
