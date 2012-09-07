@@ -16,7 +16,7 @@ class WidgetPress_Controller_Widgets {
 		add_action('init', array(__CLASS__,'register_post_type') );
 		add_action('widgets_init', array(__CLASS__, 'get_all_widgets'), 100);
 		add_filter('widgetpress_before_form_fields', array(__CLASS__, 'widgets_before_form_fields'), 10);
-		//add_filter('widgetpress_update_filter', array(__CLASS__, 'widget_update_filter'), 10, 2);
+		add_filter('widgetpress_update_filter', array(__CLASS__, 'widget_update_filter'), 10, 2);
 		add_action('wp_ajax_widgetpress_save_widget', array(__CLASS__, 'save_widget_meta'));
 		add_action('wp_ajax_widgetpress_add_widget', array(__CLASS__, 'add_widget'));
 		add_action('wp_ajax_widgetpress_sort_widget', array(__CLASS__, 'sort_widget'));
