@@ -76,8 +76,13 @@ var wmbWidgets;
                 return false;
             });
 
+            $('a.widget-control-delete').live('click', function(){
+                wmbWidgets.deleteWidget( $(this).closest('div.widget') );
+                return false;
+            });
+
             $('a.widget-control-remove').live('click', function(){
-                wmbWidgets.save( $(this).closest('div.widget'), 1, 1, 0 );
+                wmbWidgets.removeWidget( $(this).closest('div.widget') );
                 return false;
             });
 
@@ -151,7 +156,7 @@ var wmbWidgets;
 
                             if(type == 'dropzone'){
                                 ui.item.find('.widget_ID').val(r) 
-                                wmbWidgets.save( ui.item, 0, 1, 0 ); // delete widget
+                                wmbWidgets.save( ui.item, 0, 1, 0 ); // save widget
                             }
                             //console.log(r)
 
@@ -289,29 +294,14 @@ var wmbWidgets;
         },
         //add_widget : function(data)
         save : function(widget, del, animate, order) {
-             
-            //widget = '<form action="" method="post">' + widget + '</div>';
-            //$('.widget-inside > *', widget).wrapAll('<form action="" method="post" />');
-            var dz = widget.closest('div.widgets-sortables');
-            var sb = widget.closest('div.widgets-sortables').attr('id'), form = widget.find('form .widget-content input, form .widget-content select, form .widget-content textarea').serialize(), a;
-            //$('<form action="" method="post>').replaceAll('.widget-inside' , widget);
-            //console.log(data);
-            //widget = $(widget);
 
             $('.ajax-feedback', widget).css('visibility', 'visible');
 
-            
-            var action = '';
-            if($(dz).data('type') == 'layout'){
-                save_action = 'widgetpress_save_dropzone';
+            var dz = widget.closest('div.widgets-sortables');
+            var form = widget.find('form .widget-content input, form .widget-content select, form .widget-content textarea').serialize();
 
-            } else {
-                save_action = 'widgetpress_save_widget';
-            }
-
-            //var action = ()
             var data = {
-                action: save_action,
+                action: 'widgetpress_save_widget',
                 savewidgets: $('#_wpnonce_widgets').val(),
 
                 widget_ID: $('.widget_ID', widget).val(),
@@ -323,62 +313,57 @@ var wmbWidgets;
                 meta: form,
                 //type : dztype
             };
-            //var x = widget.find('form .widget-content input, form .widget-content select')
-             
 
-
-            if ( del )
-                a['delete_widget'] = 1;
-
-            
-            console.log(data);
-
-            function widget_saved(r){
-                var id;
-
-                if ( del ) {
-                    if ( !$('input.widget_number', widget).val() ) {
-                        id = $('input.widget-id', widget).val();
-                        $('#available-widgets').find('input.widget-id').each(function(){
-                            if ( $(this).val() == id )
-                                $(this).closest('div.widget').show();
-                        });
-                    }
-
-                    if ( animate ) {
-                        order = 0;
-                        widget.slideUp('fast', function(){
-                            $(this).remove();
-                            wmbWidgets.saveOrder();
-                        });
-                    } else {
-                        widget.remove();
-                        wmbWidgets.resize();
-                    }
-                } else {
-                    $('.ajax-feedback').css('visibility', 'hidden');
-                    //console.log(r.length)
-                    if ( r && r.length > 2 ) {
-                                        
-                        $('div.widget-content', widget).html(r);
-                        wmbWidgets.appendTitle(widget);
-                        wmbWidgets.fixLabels(widget);
-                    }
-                }
-                if ( order )
-                    wmbWidgets.saveOrder();
-                
-
-                
-                
-            }
-            
             $.post( ajaxurl, data, function(r){
-                //console.log(r)
-                widget_saved(r);                    
+                $('.ajax-feedback').css('visibility', 'hidden');
+                if ( r && r.length > 2 ) {                
+                    $('div.widget-content', widget).html(r);
+                    wmbWidgets.appendTitle(widget);
+                    wmbWidgets.fixLabels(widget);
+                }                  
             });
-              
+                    
         },
+
+        //Delete the widget post object
+        deleteWidget: function(widget){
+
+            $('.ajax-feedback', widget).css('visibility', 'visible');
+
+            var data = {
+                action: 'widgetpress_delete_widget',
+                widget_ID: $('.widget_ID', widget).val(),
+            }
+
+            $.post( ajaxurl, data, function(r){
+                $('.ajax-feedback').css('visibility', 'hidden');
+                 widget.slideUp('fast', function(){
+                    $(this).remove();
+                });                  
+            });
+        },
+
+        //Remove a widget from a given dropzone taxonomy
+        removeWidget: function(widget){
+            $('.ajax-feedback', widget).css('visibility', 'visible');
+
+            var dz = widget.closest('div.widgets-sortables');
+
+            var data = {
+                action: 'widgetpress_remove_widget',
+                widget_ID: $('.widget_ID', widget).val(),
+                dropzone_type: $(dz).data('type'),
+                dropzone_id: $(dz).data('id'),
+            }
+
+            $.post( ajaxurl, data, function(r){
+                $('.ajax-feedback').css('visibility', 'hidden');
+                 widget.slideUp('fast', function(){
+                    $(this).remove();
+                });         
+            });
+        },
+
         refreshMetabox: function(){
             
             var object = {

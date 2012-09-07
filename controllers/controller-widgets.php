@@ -18,6 +18,8 @@ class WidgetPress_Controller_Widgets {
 		add_filter('widgetpress_before_form_fields', array(__CLASS__, 'widgets_before_form_fields'), 10);
 		add_filter('widgetpress_update_filter', array(__CLASS__, 'widget_update_filter'), 10, 2);
 		add_action('wp_ajax_widgetpress_save_widget', array(__CLASS__, 'save_widget_meta'));
+		add_action('wp_ajax_widgetpress_delete_widget', array(__CLASS__, 'delete_widget'));
+		add_action('wp_ajax_widgetpress_remove_widget', array(__CLASS__, 'remove_widget'));
 		add_action('wp_ajax_widgetpress_add_widget', array(__CLASS__, 'add_widget'));
 		add_action('wp_ajax_widgetpress_sort_widget', array(__CLASS__, 'sort_widget'));
 	}
@@ -32,7 +34,6 @@ class WidgetPress_Controller_Widgets {
 		//echo json_encode($order+1);
 		exit();
 
-
 	}
 	public function add_widget(){
 		$widget_ID = (!empty($_POST['widget_ID'])) ? $_POST['widget_ID'] : null ;
@@ -42,8 +43,35 @@ class WidgetPress_Controller_Widgets {
 
 		$term = get_term($dropzone_id, $dropzone_type);
 
-		$widget = new WidgetPress_Model_Widget(null, $term, $widget_class);
+		$widget = new WidgetPress_Model_Widget($widget_ID, $term, $widget_class);
 		echo json_encode($widget->get('post')->ID);
+		exit();
+	}
+
+	public function delete_widget(){
+		wp_delete_post($_POST['widget_ID']);
+		exit();
+	}
+
+	/**
+	 * Removes a widget from a given dropzone term.
+	 */
+	public function remove_widget(){
+		$widget_id = $_POST['widget_ID'];
+		$dropzone_id = $_POST['dropzone_id'];
+		$dropzone_type = $_POST['dropzone_type'];
+
+		$widget = get_post($widget_id);
+
+		$widget_dropzones = wp_get_object_terms($widget_id, $dropzone_type, array('fields' => 'ids'));
+
+		foreach((array)$widget_dropzones as $index => $dropzone){
+			$widget_dropzones[$index] = (int)$dropzone;
+			if($dropzone == $dropzone_id){
+				unset($widget_dropzones[$index]);
+			}
+		}
+		$terms = wp_set_object_terms($widget_id, $widget_dropzones, $dropzone_type);
 		exit();
 	}
 
