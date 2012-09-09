@@ -354,33 +354,39 @@ class WidgetPress_Controller_Widgets {
 		if(!empty($dropzones)){
             foreach($dropzones as $dropzone){
            
+           		//echo "<pre>";print_r($dropzone);echo "</pre>";
       			$dzmeta = $dropzone->get('meta');
 				$dzspan = $dzmeta['dropzone_span'];
             	
-            	$before_dropzone = "<section class='dropzone {$dropzone->get('term')->slug} {$dzspan}''>";
+            	$before_dropzone = "<section class=\"dropzone {$dropzone->get('term')->slug} {$dzspan}\">";
+
             	echo apply_filters('widgetpress_before_dropzone', $before_dropzone, $dropzone);
 
  				$widgets = WidgetPress_Controller_Widgets::get_widgets($dropzone->get('term'));
+
  				foreach($widgets as $widget){
+ 					echo "rrr|";
  					$meta = $widget->get('meta');
  					$span = $meta['widgetpress_span'];
  					$classname = $widget->get('class')->widget_options['classname'];
-	 
-	            	$before_widget = apply_filters('widgetpress_before_widget', "<article class='widget content-container {$span} {$classname}'>", $dropzone, $widget);
+
+	 			// 	echo "<pre>";print_r($span);echo "</pre>";
+	             	$before_widget = apply_filters('widgetpress_before_widget', "<article class='widget content-container {$span} {$classname}'>", $dropzone, $widget);
 					$after_widget = apply_filters('widgetpress_after_widget', "</article>", $dropzone, $widget);
 
-	            	$before_title = apply_filters('widgetpress_before_title', "<header class='content-header'><h3>", $dropzone, $widget);
+	    			$before_title = apply_filters('widgetpress_before_title', "<header class='content-header'><h3>", $dropzone, $widget);
 					$after_title = apply_filters('widgetpress_after_title', "</h3></header>", $dropzone, $widget);
-
+					//echo "<pre>";print_r(array($meta, $span, $classname));echo "</pre>";
 					$args = array(
 						'before_widget' => $before_widget,
 						'after_widget' => $after_widget,
 						'before_title' => $before_title,
 						'after_title' => $after_title
 					);
+					//echo "<pre>";print_r($args);echo "</pre>";
 
-	       			$widget->get('class')->widget($args, $meta);
-	            	//echo "<pre>";print_r($widget);echo "</pre>";
+	    			$widget->get('class')->widget($args, $meta);
+	    //         	//echo "<pre>";print_r($widget);echo "</pre>";
 
  				}
                 echo  apply_filters('widgetpress_after_dropzone', "</section>", $dropzone);
