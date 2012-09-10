@@ -357,15 +357,18 @@ class WidgetPress_Controller_Widgets {
            		//echo "<pre>";print_r($dropzone);echo "</pre>";
       			$dzmeta = $dropzone->get('meta');
 				$dzspan = $dzmeta['dropzone_span'];
+				$dzborderl = $dzmeta['dropzone_borderleft'];
             	
-            	$before_dropzone = "<section class=\"dropzone {$dropzone->get('term')->slug} {$dzspan}\">";
+            	$before_dropzone = "<section class='dropzone {$dropzone->get('term')->slug} {$dzspan}'>";
+            	$inner_wrapper_before = "<section class='dropzone-inner-wrapper {dzborderl}'>";
 
             	echo apply_filters('widgetpress_before_dropzone', $before_dropzone, $dropzone);
+            	echo apply_filters('widgetpress_inner_wrapper_before', $inner_wrapper_before, $dropzone);
 
  				$widgets = WidgetPress_Controller_Widgets::get_widgets($dropzone->get('term'));
 
  				foreach($widgets as $widget){
- 					echo "rrr|";
+ 					//echo "rrr|";
  					$meta = $widget->get('meta');
  					$span = $meta['widgetpress_span'];
  					$classname = $widget->get('class')->widget_options['classname'];
@@ -389,6 +392,7 @@ class WidgetPress_Controller_Widgets {
 	    //         	//echo "<pre>";print_r($widget);echo "</pre>";
 
  				}
+ 				echo apply_filters('widgetpress_inner_wrapper_after', "</section>", $dropzone);
                 echo  apply_filters('widgetpress_after_dropzone', "</section>", $dropzone);
             }
         } 

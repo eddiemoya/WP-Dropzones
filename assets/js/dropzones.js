@@ -359,7 +359,7 @@ var wmbWidgets;
             $.post( ajaxurl, data, function(r){
                 $('.ajax-feedback').css('visibility', 'hidden');
                  widget.slideUp('fast', function(){
-                    $(this).remove();
+                    $(this).remove();   
                 });         
             });
         },
