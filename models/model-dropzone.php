@@ -22,6 +22,9 @@ class WidgetPress_Model_Dropzone {
 	 */
 	private $meta;
 
+	/**
+	 * 
+	 */
 	private $class;
 	/**
 	 * 
