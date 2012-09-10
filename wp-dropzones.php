@@ -25,6 +25,7 @@ include (WPDZ_MODELS 		. 'model-dropzone.php');
 include (WPDZ_MODELS 		. 'model-metabox.php');
 include (WPDZ_MODELS 		. 'model-metabox-settings.php');
 include (WPDZ_MODELS 		. 'model-metabox-layout.php');
+include (WPDZ_MODELS 		. 'model-metabox-posttypes.php');
 include (WPDZ_MODELS 		. 'model-metabox-dropzone.php');
 
 include (WPDZ_MODELS 		. 'model-widget.php');
