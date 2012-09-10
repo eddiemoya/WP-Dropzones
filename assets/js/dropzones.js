@@ -6,8 +6,11 @@ var wmbWidgets;
         init : function() {
             $('form.dropzone-settings').submit(function(e){
                 e.preventDefault();
+
                 var form = $(this).closest(".dropzone-settings");
-                
+
+                $('.ajax-feedback', form).css('visibility', 'visible');
+
                 var data = {
                     action: 'widgetpress_dropzone_settings',
                     id : $('.dropzone_id', form).val(),
@@ -16,6 +19,7 @@ var wmbWidgets;
                 }
 
                 $.post(ajaxurl, data, function(r){
+                    $('.ajax-feedback').css('visibility', 'hidden');
                    // console.log(r);
                 });
                 console.log(data);
