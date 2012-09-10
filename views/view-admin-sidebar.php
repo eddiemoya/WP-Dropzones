@@ -11,7 +11,7 @@
 
     $meta = $this->get('meta');
     $span = $meta['dropzone_span'];
-    //echo "<pre>";print_r($span);echo "</pre>";
+    $borderleft = ($meta['dropzone_borderleft'] === "true") ? 'checked="checked"' : '';
 ?>
 <div class="widgets-holder-wrap">
     
@@ -30,31 +30,38 @@
 
 
 		<div class="sidebar-description">
+            <p>
+                <form action="" class="dropzone-settings">
 
-            <form action="" class="dropzone-settings">
-
-                <label for="widgetpress_span">Widget Width: </label>   
-
-                <select id="widgetpress_dropzone_span" class="widefat widgetpress_dropzone_span" name="widgetpress_dropzone_span">
-                    <?php
-                        foreach ($spans as $value => $label ) :  ?>
-                    
-                            <option value="<?php echo $value; ?>" <?php selected($value, $span); ?>>
-                                <?php echo $label ?>
-                            </option><?php
+                    <div>
+                        <label for="widgetpress_dropzone_span">Widget Width: </label>   
+                        <select id="widgetpress_dropzone_span" class="widgetpress_dropzone_span" name="widgetpress_dropzone_span">
+                            <?php
+                                foreach ($spans as $value => $label ) :  ?>
                             
-                        endforeach; 
-                    ?>
-                </select>
-                <input type="hidden" name="dropzone_id" class="dropzone_id" value="<?php echo $this->get('post')->ID; ?>" />
-                <input type="hidden" name="dropzone_id" class="dropzone_type" value="<?php echo $this->get('post')->post_type; ?>" />
-                <div class="alignright">
-                    <img src="http://com.loc/wp-admin/images/wpspin_light.gif" class="ajax-feedback" title="" alt="" style="visibility: hidden; ">
-                    <input type="submit" name="savedropzone" class="savedropzone" value="Save">
-                </div>
-            </form>
+                                    <option value="<?php echo $value; ?>" <?php selected($value, $span); ?>>
+                                        <?php echo $label ?>
+                                    </option><?php
+                                    
+                                endforeach; 
+                            ?>
+                        </select>
 
-			<p class="description"><?php echo $description; ?></p>
+                    <div class="alignright">
+                        <img src="http://com.loc/wp-admin/images/wpspin_light.gif" class="ajax-feedback" title="" alt="" style="visibility: hidden; ">
+                        <input type="submit" name="savedropzone" class="savedropzone" value="Save">
+                    </div>
+                    </div>
+
+                    <div style="clear:left;">
+                        <label for="dropzone_borderleft">Border Left: </label>   
+                        <input type="checkbox" name="dropzone_borderleft" class="dropzone_borderleft" <?php echo $borderleft; ?> />
+                        <input type="hidden" name="dropzone_id" class="dropzone_id" value="<?php echo $this->get('post')->ID; ?>" />
+                        <input type="hidden" name="dropzone_type" class="dropzone_type" value="<?php echo $this->get('post')->post_type; ?>" />
+                    </div>
+                </form>
+            </p>
+			<p class="description" style="clear:left;"><?php echo $description; ?></p>
 		</div>
 	   
         <?php 

@@ -53,6 +53,7 @@ class WidgetPress_Controller_Dropzones {
 	public function save_dropzone(){
 		
 		update_post_meta($_POST['id'], 'dropzone_span', $_POST['span']);
+		update_post_meta($_POST['id'], 'dropzone_borderleft', $_POST['borderleft']);
 		//echo json_encode($_POST);
 		exit();
 	}

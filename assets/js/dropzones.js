@@ -4,18 +4,20 @@ var wmbWidgets;
 
 
         init : function() {
-            $('form.dropzone-settings').submit(function(e){
+            $('form.dropzone-settings input.savedropzone').click(function(e){
                 e.preventDefault();
 
                 var form = $(this).closest(".dropzone-settings");
-
+                console.log(form);
                 $('.ajax-feedback', form).css('visibility', 'visible');
 
                 var data = {
                     action: 'widgetpress_dropzone_settings',
                     id : $('.dropzone_id', form).val(),
                     type : $('.dropzone_type', form).val(),
-                    span: $('.widgetpress_dropzone_span', form).val()
+                    span: $('.widgetpress_dropzone_span', form).val(),
+                    borderleft: $('.dropzone_borderleft', form).is(':checked')
+
                 }
 
                 $.post(ajaxurl, data, function(r){

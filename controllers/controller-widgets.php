@@ -357,10 +357,11 @@ class WidgetPress_Controller_Widgets {
            		//echo "<pre>";print_r($dropzone);echo "</pre>";
       			$dzmeta = $dropzone->get('meta');
 				$dzspan = $dzmeta['dropzone_span'];
-				$dzborderl = $dzmeta['dropzone_borderleft'];
+				$dzborderl = ($dzmeta['dropzone_borderleft'] === "true") ? 'border-left' : '';
             	
             	$before_dropzone = "<section class='dropzone {$dropzone->get('term')->slug} {$dzspan}'>";
-            	$inner_wrapper_before = "<section class='dropzone-inner-wrapper {dzborderl}'>";
+
+            	$inner_wrapper_before = "<section class='dropzone-inner-wrapper {$dzborderl}'>";
 
             	echo apply_filters('widgetpress_before_dropzone', $before_dropzone, $dropzone);
             	echo apply_filters('widgetpress_inner_wrapper_before', $inner_wrapper_before, $dropzone);
