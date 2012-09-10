@@ -15,7 +15,7 @@ class WidgetPress_Controller_Dropzones {
 		do_action('widgetpress_init');
 
 		add_action( 'init', 			array(__CLASS__, 'register'));
-		add_action( 'created_layout',	array(__CLASS__, 'create_layout'));
+		//add_action( 'created_layout',	array(__CLASS__, 'create_layout'));
 		add_action( 'created_dropzone',	array(__CLASS__, 'create_dropzone'));
 		add_action( 'wp_ajax_widgetpress_dropzone_settings', array(__CLASS__, 'save_dropzone'));
 	}
@@ -133,9 +133,9 @@ class WidgetPress_Controller_Dropzones {
 	 * 
 	 */
 	public function register(){
-		self::register_layout_taxonomy();
+		//self::register_layout_taxonomy();
 		self::register_dropzone_taxonomy();
-		self::register_layout_post_type();
+		//self::register_layout_post_type();
 		self::register_dropzone_post_type();
 	}
 
@@ -211,7 +211,6 @@ class WidgetPress_Controller_Dropzones {
 		$post_types = apply_filters('widgetpress_layout_taxonomy_post_types', array(
 			'page',
 			'section',
-			'layout', 
 			'dropzone',
 			'widget'
 		));
