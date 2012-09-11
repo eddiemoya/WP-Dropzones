@@ -225,7 +225,7 @@ class WidgetPress_Controller_Widgets {
 			'has_archive' => false, 
 			'hierarchical' => false,
 			'menu_position' => null,
-			'supports' => array( 'title', 'thumbnails', 'custom-fields' )
+			'supports' => array( 'title', 'thumbnail', 'custom-fields' )
 		); 
 
 		register_post_type('widget', $args);
