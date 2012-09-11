@@ -80,15 +80,18 @@ class WPDZ_Metabox {
      * @param int $post_id
      * @return void 
      */
-    public function save($post_id) {
+    public function save($post_id = 0) {
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
             return;
 
         foreach ((array) $this->options as $key => $option) {
             if(isset($_POST[$key])){
                 update_post_meta($post_id, $key, $_POST[$key]);
+            } else {
+                delete_post_meta($post_id, $key);
             }
         }
+        return $post_id;
     }
 
     /**
