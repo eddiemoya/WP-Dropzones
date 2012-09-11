@@ -67,7 +67,7 @@ class WPDZ_Metabox_Post_Types extends WPDZ_Metabox {
         'widgetpress_post_type_question' => array(
             'label' => 'Categorized Questions',
         ),
-        'widgetpress_post_type_guides' => array(
+        'widgetpress_post_type_guide' => array(
             'label' => 'Categorized Guides',
             'label_help' => 'Select a post type to have this show up on: "category/{term}/{post_type}"'
         ),
