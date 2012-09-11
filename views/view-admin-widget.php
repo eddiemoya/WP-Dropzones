@@ -79,9 +79,10 @@ if(is_object($dropzone) && empty($span)){
 
 	            <div class="widget-control-actions">
 	                <div class="alignleft">
-	                	<a class="widget-control-remove" href="#remove">Remove</a> |
-	                    <a class="widget-control-delete" href="#remove">Delete</a> |
-	                    <a class="widget-control-close" href="#close">Close</a> 
+
+	                	<a class="widget-control-remove" href="#remove">Remove</a> |<a class="widget-control-delete" href="#remove">Delete</a> |<?php edit_post_link('Edit', '','',$widget->get('post')->ID); ?> |<a class="widget-control-close" href="#close">Close</a>
+	                    
+
 	                </div>
 	                <div class="alignright">
 	                    <img src="http://com.loc/wp-admin/images/wpspin_light.gif" class="ajax-feedback" title="" alt="" style="visibility: hidden; ">
