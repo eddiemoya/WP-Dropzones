@@ -111,7 +111,9 @@ class WidgetPress_Model_Widget {
 
 		if(!is_object($this->class) && is_string($this->class)){
 			$class = $this->class;
-			$this->class = new $class();
+			if(class_exists($class)){
+				$this->class = new $class();
+			}
 		}
 		//if(!is_null($default_class))
 			

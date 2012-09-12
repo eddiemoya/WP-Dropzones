@@ -25,7 +25,22 @@ var wmbWidgets;
                    // console.log(r);
                 });
                 console.log(data);
-            })
+            });
+
+            $('.fucking_instanity').click(function(e){
+                e.preventDefault();
+
+                var data = {
+                    action : 'fucking_instanity'
+                }
+                var link = $(this);
+                $.post( ajaxurl, data, function(t){
+                   // console.log(t);
+                   link.hide();
+                });
+                    
+            });
+            
 
             var rem, sidebars = $('div.widgets-sortables'), isRTL = !! ( 'undefined' != typeof isRtl && isRtl ),
             margin = ( isRtl ? 'marginRight' : 'marginLeft' ), the_id;

@@ -22,8 +22,64 @@ class WidgetPress_Controller_Widgets {
 		add_action('wp_ajax_widgetpress_remove_widget', array(__CLASS__, 'remove_widget'));
 		add_action('wp_ajax_widgetpress_add_widget', array(__CLASS__, 'add_widget'));
 		add_action('wp_ajax_widgetpress_sort_widget', array(__CLASS__, 'sort_widget'));
+		add_action('wp_ajax_fucking_instanity', array(__CLASS__, 'fucking_instanity'));
+		
+
 	}
 
+	/**
+	 * Seriously,... fuck this.
+	 */
+	public function fucking_instanity(){
+		$terms = Section_Front::get_terms_by_post_type('dropzone', 'widget');
+		$term_ids = wp_list_pluck($terms, 'term_id');
+		$posts = array();
+		 
+			$posts = get_posts(array(
+				'posts_per_page' => -1,
+				'post_type' => array('widget'),
+				'tax_query' => array(
+					array(
+						'taxonomy' => 'dropzone',
+						'terms' => $term_ids,
+						'field' => 'id',
+			))));
+			foreach($posts as $post){
+			
+				$post->meta = get_post_custom($post->ID, true);
+
+				foreach($post->meta as $key => $meta){
+					if(is_array($meta)){
+						$post->meta[$key] = $meta[0];
+						$meta = $meta[0];
+					}
+
+					if(strstr($key, 'widgetpress_order_dropzone_')){
+						$widget_dropzones = wp_get_object_terms($post->ID, 'dropzone');
+
+						$old_key = $key;
+						$new_key = array();
+						foreach($widget_dropzones as $dz){
+
+							 $new_key = 'widgetpress_order_dropzone_'.$dz->term_id;
+
+							update_post_meta($post->ID, $new_key, $meta);
+							delete_post_meta($post->ID, $old_meta, $meta);
+						}
+
+					}
+				}
+			}
+
+			//$posts[] = $post;
+
+		
+
+		echo json_encode(array($new_key, $old_key, $meta));
+		exit();
+
+
+	}
 	public function sort_widget(){
 		$widget_ID = $_POST['widget_ID'];
 		$id = $_POST['dropzone_id'];

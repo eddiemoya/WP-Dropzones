@@ -1,4 +1,5 @@
 <div class="wrap">
+    <a href="" class="fucking_instanity">Force Meta Taxonomy Assocation</a>
     <?php $dropzone_type = $this->callback_args['type']; ?>
     <?php if($dropzone_type != 'layout'){ ?>
     <div class="widget-liquid-left">
