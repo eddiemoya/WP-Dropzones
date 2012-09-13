@@ -285,7 +285,7 @@ class WidgetPress_Controller_Dropzones {
 		$args = apply_filters('widgetpress_dropzone_post_type_args', array(
 			'label'					=> 'dropzones',
 			'labels' 				=> $labels,
-			'public' 				=> true,
+			'public' 				=> false,
 			'publicly_queryable' 	=> false,
 			'show_ui' 				=> true, 
 			'show_in_menu' 			=> true, 
@@ -295,6 +295,7 @@ class WidgetPress_Controller_Dropzones {
 			'has_archive' 			=> false, 
 			'hierarchical' 			=> false,
 			'menu_position'			=> null,
+			'exclude_from_search'	=> true,
 			'supports' => array( 'title', 'custom-fields' )
 		)); 
 

@@ -281,6 +281,7 @@ class WidgetPress_Controller_Widgets {
 			'has_archive' => false, 
 			'hierarchical' => false,
 			'menu_position' => null,
+			'exclude_from_search'	=> true,
 			'supports' => array( 'title', 'thumbnail', 'custom-fields' )
 		); 
 
