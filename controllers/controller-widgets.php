@@ -425,7 +425,7 @@ class WidgetPress_Controller_Widgets {
 				$dzspan = $dzmeta['dropzone_span'];
 				$dzborderl = ($dzmeta['dropzone_borderleft'] === "true") ? 'border-left' : '';
             	
-            	$before_dropzone = "<section class='dropzone {$dropzone->get('term')->slug} {$dzspan}'>";
+            	$before_dropzone = "<section class='dropzone dropzone_{$dropzone->get('term')->slug} {$dzspan}'>";
 
             	$inner_wrapper_before = "<section class='dropzone-inner-wrapper {$dzborderl}'>";
 
