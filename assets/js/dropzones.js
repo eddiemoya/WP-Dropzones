@@ -24,7 +24,7 @@ var wmbWidgets;
                     $('.ajax-feedback').css('visibility', 'hidden');
                    // console.log(r);
                 });
-                console.log(data);
+                //console.log(data);
             });
 
             $('.fucking_instanity').click(function(e){
@@ -164,6 +164,8 @@ var wmbWidgets;
                     }
                     //Only do this if this had no ID (aka, is a new widget, not a resort)
                     if(item.find('.widget_ID').val() == ""){
+            
+                        item.children('.widget-inside').slideDown('fast');
                         var data = {
                             action:     add_action,
                             widget_ID:  item.find('.widget_ID').val(),
@@ -183,30 +185,32 @@ var wmbWidgets;
 
                         //ui.item.replaceWith(item);/               
                         });
+                    } else {
+                        wmbWidgets.save($(this));
                     }
                     //console.log(ui.item);
-                    var dropzone_type = $(this).data('type');
-                    var dropzone_id = $(this).data('id');
+                    // var dropzone_type = $(this).data('type');
+                    // var dropzone_id = $(this).data('id');
 
-                    sb = $('.widget', this).sortable('toArray');
-                    //console.log(sb)
-                    sb.each(
-                        function(index){
-                            var orderdata = {
-                                action:     'widgetpress_sort_widget', 
-                                dropzone_type : dropzone_type,
-                                dropzone_id : dropzone_id,
-                                widget_ID:  $('.widget_ID', this).val(),
-                                order:    index
-                            }
-                            //console.log(index, orderdata)
-                            $.post( ajaxurl, orderdata, 
-                                function(r){
-                                    //console.log(r)
-                                }          
-                            );
-                        }
-                    );
+                    // sb = $('.widget', this).sortable('toArray');
+                    // //console.log(sb)
+                    // sb.each(
+                    //     function(index){
+                    //         var orderdata = {
+                    //             action:     'widgetpress_sort_widget', 
+                    //             dropzone_type : dropzone_type,
+                    //             dropzone_id : dropzone_id,
+                    //             widget_ID:  $('.widget_ID', this).val(),
+                    //             order:    index
+                    //         }
+                    //         //console.log(index, orderdata)
+                    //         $.post( ajaxurl, orderdata, 
+                    //             function(r){
+                    //                 //console.log(r)
+                    //             }          
+                    //         );
+                    //     }
+                    // );
 
                     if ( ui.item.hasClass('ui-draggable') && ui.item.data('draggable') )
                         ui.item.draggable('destroy');
@@ -246,7 +250,7 @@ var wmbWidgets;
                         return;
                     }
                                 
-                    wmbWidgets.saveOrder(sb);
+                   // wmbWidgets.saveOrder(this);
                 },
                 receive: function(e, ui) {
                     var sender = $(ui.sender);
@@ -271,6 +275,7 @@ var wmbWidgets;
                     
                     ui.draggable.addClass('deleting');
                     $('#removing-widget').hide().children('span').html('');
+                    wmbWidgets.deleteWidget( ui.draggable );
                 },
                 over: function(e,ui) {
                     ui.draggable.addClass('deleting');
@@ -279,6 +284,8 @@ var wmbWidgets;
                     if ( ui.draggable.hasClass('ui-sortable-helper') )
                         $('#removing-widget').show().children('span')
                         .html( ui.draggable.find('div.widget-title').children('h4').html() );
+
+                        
                 },
                 out: function(e,ui) {
                     ui.draggable.removeClass('deleting');
@@ -289,28 +296,30 @@ var wmbWidgets;
             });
         },
 
-        saveOrder : function(sb) {
+        saveOrder : function(dropzone) {
+
             //console.log(sb);
-            if ( sb )
-                $('#' + sb).closest('div.widgets-holder-wrap').find('img.ajax-feedback').css('visibility', 'visible');
+            var dropzone_type = $(dropzone).data('type');
+            var dropzone_id = $(dropzone).data('id');
 
-            var b = {
-                action: 'widgets-order',
-                savewidgets: $('#_wpnonce_widgets').val(),
-                sidebars: []
-            };
-
-            $('div.widgets-sortables').each( function() {
-                if ( $(this).sortable )
-                    b['sidebars[' + $(this).attr('id') + ']'] = $(this).sortable('toArray').join(',');
+            sb = $('.widget', dropzone).sortable('toArray');
+            //console.log(sb)
+            sb.each(function(index){
+                console.log(index);
+                var orderdata = {
+                    action:     'widgetpress_sort_widget', 
+                    dropzone_type : dropzone_type,
+                    dropzone_id : dropzone_id,
+                    widget_ID:  $('.widget_ID', this).val(),
+                    order:    index
+                }
+                //console.log(orderdata.widget_ID)
+                $.post( ajaxurl, orderdata, 
+                    function(r){
+                       // console.log(r)
+                    }          
+                );
             });
-
-            $.post( ajaxurl, b, function() {
-                $('img.ajax-feedback').css('visibility', 'hidden');
-            });
-
-            this.resize();
-            //wmbWidgets.refreshMetabox();
             
         },
         //add_widget : function(data)
@@ -341,6 +350,7 @@ var wmbWidgets;
                     $('div.widget-content', widget).html(r);
                     wmbWidgets.appendTitle(widget);
                     wmbWidgets.fixLabels(widget);
+                    wmbWidgets.saveOrder(dz);
                 }                  
             });
                     
@@ -383,6 +393,8 @@ var wmbWidgets;
                     $(this).remove();   
                 });         
             });
+
+
         },
 
         refreshMetabox: function(){
