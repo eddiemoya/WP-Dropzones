@@ -28,7 +28,9 @@ class WidgetPress_Controller_Widgets {
 	}
 
 	/**
-	 * Seriously,... fuck this.
+	 * Seriously,... fuck this.This
+	 * This is a script that allows for the migration of widgets - taxonomy term id's get out of sync
+	 * if widgets are improted through WXR
 	 */
 	public function fucking_instanity(){
 		$terms = Section_Front::get_terms_by_post_type('dropzone', 'widget');
@@ -184,6 +186,7 @@ class WidgetPress_Controller_Widgets {
 			$widgets_posts = get_posts(
 				array(
 					'post_type' => array('widget'),
+					'posts_per_page' => -1,
 					'meta_key'	=> "widgetpress_order_".$tax."_".$term->term_id,
 					'orderby' 	=> 'meta_value_num',
 					'order'		=> 'ASC',
@@ -197,6 +200,7 @@ class WidgetPress_Controller_Widgets {
 					)
 				)
 			);
+
 			foreach($widgets_posts as $post){
 				$widgets[] = new WidgetPress_Model_Widget($post);
 			}
