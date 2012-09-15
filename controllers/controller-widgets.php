@@ -89,7 +89,7 @@ class WidgetPress_Controller_Widgets {
 		$order = $_POST['order'];
 
 		update_post_meta($widget_ID, 'widgetpress_order_'.$type.'_'.$id, (int)$order);
-		//echo json_encode($order+1);
+		echo json_encode(array($order, $widget_ID));
 		exit();
 
 	}
@@ -138,13 +138,16 @@ class WidgetPress_Controller_Widgets {
 		$widget_ID = $_POST['widget_ID'];
 		$widget_class = $_POST['widget_class'];
 		$widget_span = $_POST['widget_span'];
-		$meta = array_values(wp_parse_args(urldecode($_POST['meta'])));
+
+		$params = array();
+		parse_str($_POST['meta'], $params);
+		$meta = array_values($params);
 		$meta = $meta[0];
 		$metadata = array();
 		foreach($meta as $index => $kvpair){
 
 			foreach($kvpair as $key => $value){
-				$metadata[$key] = $value;
+				$metadata[$key] = stripslashes(stripslashes($value));
 			}
 
 		}
@@ -155,7 +158,7 @@ class WidgetPress_Controller_Widgets {
 		//$metadata = apply_filters('widgetpress_update_filter', $widget->get('meta'), $meta);
 		
 		$widget->update($metadata);
-		//echo json_encode($_POST);
+		 echo "<pre>";print_r($metadata);echo "</pre>";;
 		exit();
 	}
 	
