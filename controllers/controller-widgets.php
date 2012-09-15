@@ -158,7 +158,7 @@ class WidgetPress_Controller_Widgets {
 		//$metadata = apply_filters('widgetpress_update_filter', $widget->get('meta'), $meta);
 		
 		$widget->update($metadata);
-		 e//cho "<pre>";print_r($metadata);echo "</pre>";;
+		 //echo "<pre>";print_r($metadata);echo "</pre>";;
 		exit();
 	}
 	
