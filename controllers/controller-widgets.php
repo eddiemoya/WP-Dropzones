@@ -162,9 +162,6 @@ class WidgetPress_Controller_Widgets {
 		exit();
 	}
 	
-	/**
-	 * 
-	 */
 	public function get_all_widgets(){
 
 		global $wp_widget_factory;
@@ -179,7 +176,6 @@ class WidgetPress_Controller_Widgets {
 
 		self::$widgets = $all_widgets;
 	}
-
 	public function get_widgets($dropzone_term, $tax = 'dropzone'){
 
 		$term = (is_object($dropzone_term)) ? $dropzone_term : get_term($dropzone_term, $tax);
