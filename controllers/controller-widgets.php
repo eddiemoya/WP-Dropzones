@@ -111,9 +111,6 @@ class WidgetPress_Controller_Widgets {
 		exit();
 	}
 
-	/**
-	 * Removes a widget from a given dropzone term.
-	 */
 	public function remove_widget(){
 		$widget_id = $_POST['widget_ID'];
 		$dropzone_id = $_POST['dropzone_id'];
