@@ -73,10 +73,6 @@ class WidgetPress_Controller_Widgets {
 				}
 			}
 
-			//$posts[] = $post;
-
-		
-
 		echo json_encode(array($new_key, $old_key, $meta));
 		exit();
 
