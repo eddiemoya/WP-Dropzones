@@ -90,9 +90,12 @@ class WidgetPress_Model_Widget {
 
 		$this->update_options($instance);
 
-		$instance = $this->class->update($instance, $this->meta);
+		if(is_object($this->class)){
+			$instance = $this->class->update($instance, $this->meta);
+			$this->class->form($instance);
+		}
 
-		$this->class->form($instance);
+		
 
 		//$instance = apply_filters('widgetpress_after_form_fields', $instance, $this->class);
 	}
@@ -190,14 +193,15 @@ class WidgetPress_Model_Widget {
 	public function update_options($new_options){
 
 		//Run these options through the widgets update() method.
-		$new_options = $this->class->update($new_options, $this->meta);
+		if(is_object($this->class)){
+			$new_options = $this->class->update($new_options, $this->meta);
 
-
-		if(!empty($new_options)) {
-			$this->meta = $new_options;
-			foreach($new_options as $option => $value){
-				$this->update_option($option, $value);
-				update_post_meta($this->post->ID, $option, $value);
+			if(!empty($new_options)) {
+				$this->meta = $new_options;
+				foreach($new_options as $option => $value){
+					$this->update_option($option, $value);
+					update_post_meta($this->post->ID, $option, $value);
+				}
 			}
 		}
 
