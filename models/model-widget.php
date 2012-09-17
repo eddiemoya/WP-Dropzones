@@ -106,7 +106,7 @@ class WidgetPress_Model_Widget {
 	private function set_widget_class($default_class = null){
 		$class = $this->meta['widgetpress_widget_classname'];
 		//$this->class = new $class();
-		if(!empty($class)){
+		if(!empty($class) && class_exists($class)){
 			$this->class = new $class();
 		} else {
 			$this->class = (!empty($default_class)) ? $default_class : $class;
