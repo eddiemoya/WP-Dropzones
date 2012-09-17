@@ -403,10 +403,20 @@ class WidgetPress_Controller_Widgets {
 		global $wp_the_query;
 
 		//Magical fucking resetting of a query that _never_ took place FUCKING MAGIC BITCH!
-		$wp_the_query->query['post_type'] = array($wp_the_query->query_vars['old_post_type']);
-		$wp_the_query->query['orderby'] = 'date';
-		unset($wp_the_query->query['meta_key']);
-		$wp_the_query->query($wp_the_query->query);
+		// $wp_the_query->query['post_type'] = array($wp_the_query->query_vars['old_post_type']);
+		// $wp_the_query->query['category'] = $wp_the_query->query_vars['old_category'];
+		// $wp_the_query->query['paged'] = $wp_the_query->query_vars['old_paged'];
+		// $wp_the_query->query['orderby'] = 'date';
+		// unset($wp_the_query->query['meta_key']);
+		// $wp_the_query->query($wp_the_query->query);
+		// echo "<pre>";print_r($wp_the_query);echo "</pre>";
+
+		$query['post_type'] = array($wp_the_query->query_vars['old_post_type']);
+		$query['category_name'] = $wp_the_query->query_vars['old_category'];
+		$query['paged'] = $wp_the_query->query_vars['old_paged'];
+		$query['orderby'] = 'date';
+		// unset($wp_the_query->query['meta_key']);
+		$wp_the_query = new WP_Query($query);
 		//echo "<pre>";print_r($wp_the_query);echo "</pre>";
 
 
@@ -451,7 +461,9 @@ class WidgetPress_Controller_Widgets {
 					);
 					//echo "<pre>";print_r($args);echo "</pre>";
 
-	    			$widget->get('class')->widget($args, $meta);
+					if(is_object($widget->get('class'))){
+	    				$widget->get('class')->widget($args, $meta);
+	    			}
 	    //         	//echo "<pre>";print_r($widget);echo "</pre>";
 
  				}
