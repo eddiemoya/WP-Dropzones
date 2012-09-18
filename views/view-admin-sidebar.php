@@ -76,8 +76,10 @@
                 $dropzones = WidgetPress_Controller_Dropzones::get_dropzones('dropzone');
                 foreach ((array)$dropzones as $dropzone){
                     if(is_object($dropzone)){
-                        $widget = $dropzone->get('class');
-                        include(WPDZ_VIEWS . 'view-admin-widget.php');
+                        if(class_exists($dropzone->get('class'))){
+                            $widget = $dropzone->get('class');
+                            include(WPDZ_VIEWS . 'view-admin-widget.php');
+                        }
                     }
                 }
 
