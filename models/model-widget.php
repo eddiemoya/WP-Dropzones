@@ -90,6 +90,8 @@ class WidgetPress_Model_Widget {
 
 		$this->update_options($instance);
 
+
+
 		if(is_object($this->class)){
 			$instance = $this->class->update($instance, $this->meta);
 			$this->class->form($instance);
@@ -172,8 +174,30 @@ class WidgetPress_Model_Widget {
 				}
 			}
 		}
+		//return $meta;
 
 		$this->meta = $meta;
+	}
+
+	private function get_widget_meta(){
+
+		$meta = get_post_custom($this->post->ID);
+		unset($meta['_edit_lock']);
+		unset($meta['_edit_last']);
+		unset($meta['widgetpress_widget_classname']);
+		unset($meta['widgetpress_order_dropzone_856']);
+		unset($meta['widetpress_span']);
+		unset($meta['widget_name']);
+
+		//get post custom sometiems returns oddly structured arrays. This cleans it up. most of the time.
+		if(!empty($meta)){
+			foreach($meta as &$m){
+				if(is_array($m)){
+					$m = $m[0];
+				}
+			}
+		}
+		return $meta;
 	}
 
 	/**
@@ -195,6 +219,12 @@ class WidgetPress_Model_Widget {
 		//Run these options through the widgets update() method.
 		if(is_object($this->class)){
 			$new_options = $this->class->update($new_options, $this->meta);
+
+			$old_options = $this->get_widget_meta();
+
+			foreach((array)$old_options as $key => $value){
+				delete_post_meta($this->post->ID, $key);
+			}
 
 			if(!empty($new_options)) {
 				$this->meta = $new_options;
