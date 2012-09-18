@@ -400,7 +400,7 @@ class WidgetPress_Controller_Widgets {
      * Holy filters batman!
      */
 	public function display_dropzones(){
-		global $wp_the_query, $paged;
+		global $wp_the_query, $paged, $wp_query;
 
 		//Magical fucking resetting of a query that _never_ took place FUCKING MAGIC BITCH!
 		// $wp_the_query->query['post_type'] = array($wp_the_query->query_vars['old_post_type']);
@@ -418,8 +418,9 @@ class WidgetPress_Controller_Widgets {
 		$paged = $query['paged'];
 
 		// unset($wp_the_query->query['meta_key']);
-		query_posts($query);
-		//echo "<pre>";print_r($wp_query);echo "</pre>";
+		//query_posts($query);
+		$wp_the_query = new WP_Query($query);
+		//echo "<pre>";print_r($wp_the_query);echo "</pre>";
 
 
 		echo apply_filters('widgetpress_before_dropzones_container', '<section class="dropzones span12">', $dropzone);
