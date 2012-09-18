@@ -284,7 +284,7 @@ class WidgetPress_Controller_Widgets {
 		register_post_type('widget', $args);
 	}
 
-	    /**
+	/**
      * Helper function - does not need to be part of widgets, this is custom, but 
      * is helpful in generating multiple input fields for the admin form at once. 
      * 
