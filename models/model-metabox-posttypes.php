@@ -51,16 +51,16 @@ class WPDZ_Metabox_Post_Types extends WPDZ_Metabox {
             'label' => 'Category Archive',
             'label_help' => 'Category Archives with no post type filter: "/category/{term}"'
         ),
-        //  'widgetpress_post_archive' => array(
-        //     'label' => 'Posts Archive',
-        // ),
-        // 'widgetpress_question_archive' => array(
-        //     'label' => 'Questions Archive',
-        // ),
-        // 'widgetpress_guide_archive' => array(
-        //     'label' => 'Guides Archive',
-        //     'label_help' => 'Select a post type to have this show up on: "category/{post_type}"'
-        // ),
+         'widgetpress_post_archive' => array(
+            'label' => 'Posts Archive',
+        ),
+        'widgetpress_question_archive' => array(
+            'label' => 'Questions Archive',
+        ),
+        'widgetpress_guide_archive' => array(
+            'label' => 'Guides Archive',
+            'label_help' => 'Select a post type to have this show up on: "category/{post_type}"'
+        ),
         'widgetpress_post_type_post' => array(
             'label' => 'Categorized Posts',
         ),
