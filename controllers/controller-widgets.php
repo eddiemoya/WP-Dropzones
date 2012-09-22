@@ -399,7 +399,8 @@ class WidgetPress_Controller_Widgets {
     /**
      * Holy filters batman!
      */
-	public function display_dropzones(){
+	public function display_dropzones($post_id = null){
+
 		global $wp_the_query, $paged, $wp_query;
 
 		//Magical fucking resetting of a query that _never_ took place FUCKING MAGIC BITCH!
@@ -425,9 +426,16 @@ class WidgetPress_Controller_Widgets {
 		//echo "<pre>";print_r($wp_the_query);echo "</pre>";
 
 
-		echo apply_filters('widgetpress_before_dropzones_container', '<section class="dropzones span12">', $dropzone);
+		
 
-		$dropzones = WidgetPress_Controller_Dropzones::get_dropzones('dropzone');
+
+		//if(empty($post_id)){
+			$dropzones = WidgetPress_Controller_Dropzones::get_dropzones('dropzone');
+		//} else {
+			//$dropzones = WidgetPress_Cont
+		//}
+		echo apply_filters('widgetpress_before_dropzones_container', '<section class="dropzones span12">', $dropzones);
+
 		if(!empty($dropzones)){
             foreach($dropzones as $dropzone){
            
@@ -479,4 +487,63 @@ class WidgetPress_Controller_Widgets {
         echo apply_filters('widgetpress_after_dropzones_container', "</section>", $dropzone);
 	}
 
+
+	/**
+	* Duplicate of above, needs to be merged. The above needs to not try to get 'old_' query data on single page loads - but sections are single page loads.
+	*/
+	public function display_dropzone($slug  = null){
+
+		
+		$post = new WP_Query(array('name'=>$slug, 'post_type'=>'section'));
+		//$post = get_dropzone_post($term, 'section');
+		//echo "<pre>";print_r($post);echo "</pre>";
+		
+		$dropzones = WidgetPress_Controller_Dropzones::get_dropzones('dropzone', $post->post->ID);
+
+			
+		
+		//$dropzones = new WP_Query(array('pagename'=>$slug));
+		//echo "<pre>";print_r($dropzones);echo "</pre>";
+		echo apply_filters('widgetpress_before_dropzones_container', '<section class="dropzones span12">', $dropzone);
+
+
+		foreach($dropzones as $dropzone){
+			echo apply_filters('widgetpress_before_dropzone', $before_dropzone, $dropzone);
+            echo apply_filters('widgetpress_inner_wrapper_before', $inner_wrapper_before, $dropzone);
+
+            $widgets = WidgetPress_Controller_Widgets::get_widgets($dropzone->get('term'));
+
+            foreach($widgets as $widget){
+				$meta = $widget->get('meta');
+				$span = $meta['widgetpress_span'];
+				$classname = $widget->get('class')->widget_options['classname'];
+
+             	$before_widget = apply_filters('widgetpress_before_widget', "<article class='widget content-container {$span} {$classname}'>", $dropzone, $widget);
+				$after_widget = apply_filters('widgetpress_after_widget', "</article>", $dropzone, $widget);
+
+    			$before_title = apply_filters('widgetpress_before_title', "<header class='content-header'><h3>", $dropzone, $widget);
+				$after_title = apply_filters('widgetpress_after_title', "</h3></header>", $dropzone, $widget);
+				//echo "<pre>";print_r(array($meta, $span, $classname));echo "</pre>";
+				$args = array(
+					'before_widget' => $before_widget,
+					'after_widget' => $after_widget,
+					'before_title' => $before_title,
+					'after_title' => $after_title
+				);
+				if(is_object($widget->get('class'))){
+    				$widget->get('class')->widget($args, $meta);
+    			}
+            	//echo "<pre>";print_r($widget);echo "</pre>";
+            }
+			
+
+			echo apply_filters('widgetpress_inner_wrapper_after', "</section>", $dropzone);
+            echo  apply_filters('widgetpress_after_dropzone', "</section>", $dropzone);
+		}
+		
+		echo apply_filters('widgetpress_after_dropzones_container', "</section>", $dropzone);
+	}
+
 }
+
+

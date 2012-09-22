@@ -23,3 +23,7 @@ add_filter('wpdz_dropzones', 'add_dropzones');
 function display_dropzones(){
     WidgetPress_Controller_Widgets::display_dropzones();
 }
+
+function display_dropzone($slug = null){
+    WidgetPress_Controller_Widgets::display_dropzone($slug);
+}
