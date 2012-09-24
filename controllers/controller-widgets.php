@@ -504,12 +504,12 @@ class WidgetPress_Controller_Widgets {
 		
 		//$dropzones = new WP_Query(array('pagename'=>$slug));
 		//echo "<pre>";print_r($dropzones);echo "</pre>";
-		echo apply_filters('widgetpress_before_dropzones_container', '<section class="dropzones span12">', $dropzone);
+		//echo apply_filters('widgetpress_before_dropzones_container', '<section class="dropzones span12">', $dropzone);
 
 
 		foreach($dropzones as $dropzone){
-			echo apply_filters('widgetpress_before_dropzone', $before_dropzone, $dropzone);
-            echo apply_filters('widgetpress_inner_wrapper_before', $inner_wrapper_before, $dropzone);
+			//echo apply_filters('widgetpress_before_dropzone', $before_dropzone, $dropzone);
+            //echo apply_filters('widgetpress_inner_wrapper_before', $inner_wrapper_before, $dropzone);
 
             $widgets = WidgetPress_Controller_Widgets::get_widgets($dropzone->get('term'));
 
@@ -537,11 +537,11 @@ class WidgetPress_Controller_Widgets {
             }
 			
 
-			echo apply_filters('widgetpress_inner_wrapper_after', "</section>", $dropzone);
-            echo  apply_filters('widgetpress_after_dropzone', "</section>", $dropzone);
+			//echo apply_filters('widgetpress_inner_wrapper_after', "</section>", $dropzone);
+            //echo  apply_filters('widgetpress_after_dropzone', "</section>", $dropzone);
 		}
 		
-		echo apply_filters('widgetpress_after_dropzones_container', "</section>", $dropzone);
+		//echo apply_filters('widgetpress_after_dropzones_container', "</section>", $dropzone);
 	}
 
 }
