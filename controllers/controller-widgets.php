@@ -417,6 +417,7 @@ class WidgetPress_Controller_Widgets {
 		$query['category_name'] = $wp_the_query->query_vars['old_category'];
 		$query['paged'] = ($wp_the_query->query_vars['old_paged'] > 0) ? $wp_the_query->query_vars['old_paged'] : 1 ;
 		$query['orderby'] = 'date';
+		$paged = $query['paged'];
 	
 
 
