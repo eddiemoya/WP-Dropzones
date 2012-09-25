@@ -480,7 +480,7 @@ class WidgetPress_Controller_Widgets {
 	    //         	//echo "<pre>";print_r($widget);echo "</pre>";
 
  				}
- 				echo apply_filters('widgetpress_inner_wrapper_after', "</section>", $dropzone);
+ 				echo apply_filters('widgetpress_inner_wrapper_after', "<div class='clearfix'></div></section>", $dropzone);
                 echo  apply_filters('widgetpress_after_dropzone', "</section>", $dropzone);
             }
         } 
