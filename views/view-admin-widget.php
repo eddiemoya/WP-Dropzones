@@ -27,7 +27,7 @@ if(isset($dropzone) && is_object($dropzone) && empty($span)){
 	    <div class="widget-top">
 	        <div class="widget-title-action">
 	            <a class="widget-action hide-if-no-js" href="#available-widgets"></a>
-	            <a class="widget-control-edit hide-if-js" href="/wp-admin/widgets.php?editwidget_class=<?php echo $widget_class; ?>">
+	            <a class="widget-control-edit hide-if-js" href="/wp-admin/widgets.php?editwidget_class=<?php echo (isset($widget_class)) ? $widget_class : ''; ?>">
 	                <span class="edit">Edit</span>
 	                <span class="add">Add</span>
 	            </a>
@@ -41,6 +41,7 @@ if(isset($dropzone) && is_object($dropzone) && empty($span)){
 	    </div>
 
 	    <div class="widget-inside">
+	    	<?php if(isset($dropzone)): ?>
 	        <form action="" method="post">
 	            <div class="widget-content">
 
@@ -91,6 +92,7 @@ if(isset($dropzone) && is_object($dropzone) && empty($span)){
 	                <br class="clear">
 	            </div>
 	        </form>
+	    <?php endif; ?>
 	    </div>
 
 	    <div class="widget-description">
