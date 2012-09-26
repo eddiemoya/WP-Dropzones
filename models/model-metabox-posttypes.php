@@ -53,9 +53,11 @@ class WPDZ_Metabox_Post_Types extends WPDZ_Metabox {
         ),
          'widgetpress_post_archive' => array(
             'label' => 'Posts Archive',
+            'label_help' => ''
         ),
         'widgetpress_question_archive' => array(
             'label' => 'Questions Archive',
+            'label_help' => ''
         ),
         'widgetpress_guide_archive' => array(
             'label' => 'Guides Archive',
@@ -63,9 +65,11 @@ class WPDZ_Metabox_Post_Types extends WPDZ_Metabox {
         ),
         'widgetpress_post_type_post' => array(
             'label' => 'Categorized Posts',
+            'label_help' => ''
         ),
         'widgetpress_post_type_question' => array(
             'label' => 'Categorized Questions',
+            'label_help' => ''
         ),
         'widgetpress_post_type_guide' => array(
             'label' => 'Categorized Guides',

@@ -14,7 +14,7 @@ $span = $meta['widgetpress_span'];
 
 $layout_span = null;
 
-if(is_object($dropzone) && empty($span)){
+if(isset($dropzone) && is_object($dropzone) && empty($span)){
 	global $post_id; 
 	$id = (int)$dropzone->get('term')->term_id - 1;
 	$span = get_post_meta($post_id, 'widgetpress_dropzone_span_'.$id);
