@@ -243,7 +243,10 @@ class WidgetPress_Model_Widget {
 
 		$previous_value = (isset($this->meta[$key])) ? $this->meta[$key] : null ;
 
-		update_post_meta($this->post->ID, $key, $value, $previous_value);
+		if(isset($this->post)){
+			update_post_meta($this->post->ID, $key, $value, $previous_value);
+		}
+		
 		$this->meta[$key] = $value;
 	}
 
