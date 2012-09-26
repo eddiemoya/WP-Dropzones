@@ -5,7 +5,13 @@
  */
 
 //$widget = $widget->get('class');
-$options = (object)$widget->get('class')->widget_options; 
+$options = (object)$widget->get('class');
+
+if(isset($options->widget_options)) {
+	$options = (object)$options->widget_options; 
+}
+
+
 //$ID = $widget->widget_ID;
 
 //echo "<pre>";print_r($widget);echo "</pre>"; 
@@ -22,26 +28,24 @@ if(isset($dropzone) && is_object($dropzone) && empty($span)){
 }
 
 	?>
-
 	<div id="widget-" class="widget ui-draggable"> 
 	    <div class="widget-top">
 	        <div class="widget-title-action">
 	            <a class="widget-action hide-if-no-js" href="#available-widgets"></a>
-	            <a class="widget-control-edit hide-if-js" href="/wp-admin/widgets.php?editwidget_class=<?php echo (isset($widget_class)) ? $widget_class : ''; ?>">
+	            <a class="widget-control-edit hide-if-js" href="/wp-admin/widgets.php?editwidget_class=<?php echo (isset($widget_class)) ? $widget_class: ''; ?>">
 	                <span class="edit">Edit</span>
 	                <span class="add">Add</span>
 	            </a>
 	        </div>
 	        <div class="widget-title">
 	            <h4>
-	                <?php echo $widget->get('class')->name; ?>
+	                <?php echo (isset($widget->get('class')->name)) ? $widget->get('class')->name:  "!!! Widget not available !!!"; ?>
 	                <span class="in-widget-title"></span>
 	            </h4>
 	        </div>
 	    </div>
 
 	    <div class="widget-inside">
-	    	<?php if(isset($dropzone)): ?>
 	        <form action="" method="post">
 	            <div class="widget-content">
 
@@ -92,10 +96,9 @@ if(isset($dropzone) && is_object($dropzone) && empty($span)){
 	                <br class="clear">
 	            </div>
 	        </form>
-	    <?php endif; ?>
 	    </div>
 
 	    <div class="widget-description">
-	        <?php echo $options->description; ?>
+<?php echo (isset($options->description)) ? $options->description : '' ; ?>
 	    </div>
 	</div>
