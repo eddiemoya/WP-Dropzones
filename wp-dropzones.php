@@ -14,6 +14,7 @@ define('WPDZ_CONTROLLERS', 	WPDZ_PATH . 'controllers/');
 define('WPDZ_VIEWS', 		WPDZ_PATH . 'views/');
 define('WPDZ_MODELS', 		WPDZ_PATH . 'models/');
 define('WPDZ_WIDGETS', 		WPDZ_MODELS . 'widgets/');
+define('WPDZ_COMPAT', 		WPDZ_PATH . 'compat/');
 
 include (WPDZ_WIDGETS 		. 'dropzone-widget/dropzone-widget.php');
 
@@ -29,6 +30,7 @@ include (WPDZ_MODELS 		. 'model-metabox-posttypes.php');
 include (WPDZ_MODELS 		. 'model-metabox-dropzone.php');
 
 include (WPDZ_MODELS 		. 'model-widget.php');
+include (WPDZ_COMPAT		. 'widgets.php');
 include (WPDZ_PATH   		. 'functions.php');
 
 
