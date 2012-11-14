@@ -19,6 +19,7 @@ if (is_plugin_active("wp-polls/wp-polls.php")){
 
 }
 
+add_action('widgetpress_compat_wp_polls-get_poll', 'get_poll');
 /**
  * Nearly complete copy of Polls widget from WP-Polls v2.63.
  * One line in the Update method is removed for compatibility.
@@ -40,7 +41,10 @@ class WP_Widget_Polls_WidgetPress_Compat extends WP_Widget {
 		if(!empty($title)) {
 			echo $before_title.$title.$after_title;
 		}
-		get_poll($poll_id);	
+
+		do_action('widgetpress_compat_wp_polls-get_poll', $poll_id);
+		//get_poll($poll_id);	
+
 		if($display_pollarchive) {
 			display_polls_archive_link();
 		}
