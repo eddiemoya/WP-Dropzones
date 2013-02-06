@@ -27,3 +27,39 @@ function display_dropzones(){
 function display_dropzone($slug = null){
     WidgetPress_Controller_Widgets::display_dropzone($slug);
 }
+
+function display_dropzone_by_terms($slug = null, $categories){
+
+     //$post_name_check = $wpdb->get_var( $wpdb->prepare( $check_sql, implode( "', '", $slugs) ) );
+
+
+    WidgetPress_Controller_Widgets::display_dropzone($slug_found);
+}
+
+
+/**
+ * This is bad, please dont use this for anything else - it WILL be removed, and you will be shamed!
+ * Do not look at this as an example of how to do anything - this is bad, and you are bad for even looking at it. Bad developer! Bad! Shoo, go away now.
+ *
+ * @author Eddie Moya
+ */
+function get_first_available_slug_from_list_of_terms_dont_use_this_horrible_function($slug, $categories, $bool = false){
+    global $wpdb;
+
+    foreach($categories as $category){
+        $slugs[] = $slug . '_' . $category->slug;
+    }
+
+    $slugs[] = $slug;
+
+    //Stolen from the wp_unique_post_slug() function in wp-includes/post.php
+    //Couldnt use that function because it requires an actual post object id to be passed, which we dont have or may not even exist in this case
+    $check_sql = "SELECT post_name FROM $wpdb->posts WHERE post_name IN ( '".implode( "', '", esc_sql($slugs))."' ) AND post_type = %s ORDER BY field(post_name, '".implode( "', '", esc_sql($slugs))."' ) LIMIT 1";
+    $slug_found = $wpdb->get_var($wpdb->prepare($check_sql, "section"));
+    
+    if($bool){
+        return ($slug_found);
+    } else {
+        return $slug_found;
+    }
+}
