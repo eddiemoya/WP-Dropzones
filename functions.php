@@ -39,6 +39,7 @@ function display_dropzone_by_terms($slug = null, $categories){
 
 /**
  * This is bad, please dont use this for anything else - it WILL be removed, and you will be shamed!
+ * Do not look at this as an example of how to do anything - this is bad, and you are bad for even looking at it. Bad developer! Bad! Shoo, go away now.
  *
  * @author Eddie Moya
  */
