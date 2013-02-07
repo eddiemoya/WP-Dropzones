@@ -41,8 +41,6 @@ function display_dropzone_by_terms($slug = null, $categories){
  * This is bad, please dont use this for anything else - it WILL be removed, and you will be shamed!
  * Do not look at this as an example of how to do anything - this is bad, and you are bad for even looking at it. Bad developer! Bad! Shoo, go away now.
  *
- * Added for single pages to use.
- *
  * @author Eddie Moya
  */
 function get_first_available_slug_from_list_of_terms_dont_use_this_horrible_function($slug, $categories, $bool = false){
@@ -67,7 +65,6 @@ function get_first_available_slug_from_list_of_terms_dont_use_this_horrible_func
 
     //$slugs = array_merge($slugs, $parent_slugs);
     $slugs[] = $slug;
-    print_pre($slugs);
 
     //Stolen from the wp_unique_post_slug() function in wp-includes/post.php
     //Couldnt use that function because it requires an actual post object id to be passed, which we dont have or may not even exist in this case
@@ -80,3 +77,4 @@ function get_first_available_slug_from_list_of_terms_dont_use_this_horrible_func
         return $slug_found;
     }
 }
+
