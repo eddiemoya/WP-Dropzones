@@ -48,7 +48,7 @@
                         </select>
 
                     <div class="alignright">
-                        <img src="http://com.loc/wp-admin/images/wpspin_light.gif" class="ajax-feedback" title="" alt="" style="visibility: hidden; ">
+                        <img src="<?php echo admin_url('images/wpspin_light.gif'); ?>" class="ajax-feedback" title="" alt="" style="visibility: hidden; ">
                         <input type="submit" name="savedropzone" class="savedropzone" value="Save">
                     </div>
                     </div>

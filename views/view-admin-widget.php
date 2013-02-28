@@ -32,7 +32,7 @@ if(isset($dropzone) && is_object($dropzone) && empty($span)){
 	    <div class="widget-top">
 	        <div class="widget-title-action">
 	            <a class="widget-action hide-if-no-js" href="#available-widgets"></a>
-	            <a class="widget-control-edit hide-if-js" href="/wp-admin/widgets.php?editwidget_class=<?php echo (isset($widget_class)) ? $widget_class: ''; ?>">
+	            <a class="widget-control-edit hide-if-js" href="<?php echo admin_url('widgets.php?editwidget_class='.(isset($widget_class)) ? $widget_class: ''); ?>">
 	                <span class="edit">Edit</span>
 	                <span class="add">Add</span>
 	            </a>
@@ -90,7 +90,7 @@ if(isset($dropzone) && is_object($dropzone) && empty($span)){
 
 	                </div>
 	                <div class="alignright">
-	                    <img src="http://com.loc/wp-admin/images/wpspin_light.gif" class="ajax-feedback" title="" alt="" style="visibility: hidden; ">
+	                    <img src="<?php echo admin_url('images/wpspin_light.gif'); ?>" class="ajax-feedback" title="" alt="" style="visibility: hidden; ">
 	                    <input type="submit" name="savewidget" id="widget-archives-__i__-savewidget" class="button-primary widget-control-save" value="Save">
 	                </div>
 	                <br class="clear">
