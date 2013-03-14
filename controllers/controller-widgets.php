@@ -465,8 +465,8 @@ class WidgetPress_Controller_Widgets {
 	             	$before_widget = apply_filters('widgetpress_before_widget', "<article class='widget content-container {$span} {$classname}'>", $dropzone, $widget);
 					$after_widget = apply_filters('widgetpress_after_widget', "</article>", $dropzone, $widget);
 
-	    			$before_title = apply_filters('widgetpress_before_title', "<header class='content-header'><h3>", $dropzone, $widget);
-					$after_title = apply_filters('widgetpress_after_title', "</h3></header>", $dropzone, $widget);
+	    			$before_title = apply_filters('widgetpress_before_title', "<header class='content-header'>", $dropzone, $widget);
+					$after_title = apply_filters('widgetpress_after_title', "</header>", $dropzone, $widget);
 					//echo "<pre>";print_r(array($meta, $span, $classname));echo "</pre>";
 					$args = array(
 						'before_widget' => $before_widget,
@@ -523,8 +523,8 @@ class WidgetPress_Controller_Widgets {
              	$before_widget = apply_filters('widgetpress_before_widget', "<article class='widget content-container {$span} {$classname}'>", $dropzone, $widget);
 				$after_widget = apply_filters('widgetpress_after_widget', "</article>", $dropzone, $widget);
 
-    			$before_title = apply_filters('widgetpress_before_title', "<header class='content-header'><h3>", $dropzone, $widget);
-				$after_title = apply_filters('widgetpress_after_title', "</h3></header>", $dropzone, $widget);
+    			$before_title = apply_filters('widgetpress_before_title', "<header class='content-header'>", $dropzone, $widget);
+				$after_title = apply_filters('widgetpress_after_title', "</header>", $dropzone, $widget);
 				//echo "<pre>";print_r(array($meta, $span, $classname));echo "</pre>";
 				$args = array(
 					'before_widget' => $before_widget,
