@@ -49,31 +49,39 @@ class WPDZ_Metabox_Post_Types extends WPDZ_Metabox {
     var $options = array(
         'widgetpress_post_type_none' => array(
             'label' => 'Category Archive',
-            'label_help' => 'Category Archives with no post type filter: "/category/{term}"'
+            'label_help' => '/category/{term}<hr>'
         ),
          'widgetpress_post_archive' => array(
             'label' => 'Posts Archive',
-            'label_help' => ''
+            'label_help' => '/posts'
         ),
         'widgetpress_question_archive' => array(
             'label' => 'Questions Archive',
-            'label_help' => ''
+            'label_help' => '/questions'
         ),
         'widgetpress_guide_archive' => array(
             'label' => 'Guides Archive',
-            'label_help' => 'Select a post type to have this show up on: "category/{post_type}"'
+            'label_help' => '/guides'
+        ),
+        'widgetpress_format_archive' => array(
+            'label' => 'Format: Video Archive',
+            'label_help' => '/videos<hr>'
         ),
         'widgetpress_post_type_post' => array(
             'label' => 'Categorized Posts',
-            'label_help' => ''
+            'label_help' => '/category/{term}/post'
         ),
         'widgetpress_post_type_question' => array(
             'label' => 'Categorized Questions',
-            'label_help' => ''
+            'label_help' => '/category/{term}/question'
         ),
         'widgetpress_post_type_guide' => array(
             'label' => 'Categorized Guides',
-            'label_help' => 'Select a post type to have this show up on: "category/{term}/{post_type}"'
+            'label_help' => '/category/{term}/guide'
+        ),
+        'widgetpress_category_format' => array(
+            'label' => 'Categorized Videos',
+            'label_help' => '/category/{term}/video'
         ),
     );
 
