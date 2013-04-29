@@ -47,6 +47,10 @@ class WPDZ_Metabox_Post_Types extends WPDZ_Metabox {
      * @var type 
      */
     var $options = array(
+        'widgetpress_skcategory_archive' => array(
+            'label' => 'SKCategory Archive',
+            'label_help' => '/skcategory/{term}<hr>'
+        ),
         'widgetpress_post_type_none' => array(
             'label' => 'Category Archive',
             'label_help' => '/category/{term}<hr>'

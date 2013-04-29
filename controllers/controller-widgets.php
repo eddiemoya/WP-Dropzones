@@ -415,6 +415,7 @@ class WidgetPress_Controller_Widgets {
 		//if(!is_admin()){
 			$query['post_type'] = $wp_the_query->query_vars['old_post_type'];
 			$query['category_name'] = $wp_the_query->query_vars['old_category'];
+			$query['skcategory'] = $wp_the_query->query_vars['old_skcategory'];
 			$query['post_format'] = $wp_the_query->query_vars['old_format'];
 			$query['paged'] = ($wp_the_query->query_vars['old_paged'] > 0) ? $wp_the_query->query_vars['old_paged'] : 1 ;
 			$query['orderby'] = 'date';
