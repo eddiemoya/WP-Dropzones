@@ -49,6 +49,7 @@ class WP_Widget_Polls_WidgetPress_Compat extends WP_Widget {
 			display_polls_archive_link();
 		}
 		echo $after_widget;
+		wp_enqueue_script('wp-polls');
 	}
 
 	// When Widget Control Form Is Posted
