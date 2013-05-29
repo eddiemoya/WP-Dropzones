@@ -401,26 +401,26 @@ class WidgetPress_Controller_Widgets {
      */
 	public function display_dropzones($post_id = null){
 
-		global $wp_the_query, $paged, $wp_query;
+		// global $wp_the_query, $paged, $wp_query;
 
-		//Magical fucking resetting of a query that _never_ took place FUCKING MAGIC BITCH!
-		// $wp_the_query->query['post_type'] = array($wp_the_query->query_vars['old_post_type']);
-		// $wp_the_query->query['category'] = $wp_the_query->query_vars['old_category'];
-		// $wp_the_query->query['paged'] = $wp_the_query->query_vars['old_paged'];
-		// $wp_the_query->query['orderby'] = 'date';
-		// unset($wp_the_query->query['meta_key']);
-		// $wp_the_query->query($wp_the_query->query);
-		// echo "<pre>";print_r($wp_the_query);echo "</pre>";
+		// //Magical fucking resetting of a query that _never_ took place FUCKING MAGIC BITCH!
+		// // $wp_the_query->query['post_type'] = array($wp_the_query->query_vars['old_post_type']);
+		// // $wp_the_query->query['category'] = $wp_the_query->query_vars['old_category'];
+		// // $wp_the_query->query['paged'] = $wp_the_query->query_vars['old_paged'];
+		// // $wp_the_query->query['orderby'] = 'date';
+		// // unset($wp_the_query->query['meta_key']);
+		// // $wp_the_query->query($wp_the_query->query);
+		// // echo "<pre>";print_r($wp_the_query);echo "</pre>";
 
-		//if(!is_admin()){
-			$query['post_type'] = $wp_the_query->query_vars['old_post_type'];
-			$query['category_name'] = $wp_the_query->query_vars['old_category'];
-			$query['skcategory'] = $wp_the_query->query_vars['old_skcategory'];
-			$query['post_format'] = $wp_the_query->query_vars['old_format'];
-			$query['paged'] = ($wp_the_query->query_vars['old_paged'] > 0) ? $wp_the_query->query_vars['old_paged'] : 1 ;
-			$query['orderby'] = 'date';
-			$paged = $query['paged'];
-		//}
+		// //if(!is_admin()){
+		// 	$query['post_type'] = $wp_the_query->query_vars['old_post_type'];
+		// 	$query['category_name'] = $wp_the_query->query_vars['old_category'];
+		// 	$query['skcategory'] = $wp_the_query->query_vars['old_skcategory'];
+		// 	$query['post_format'] = $wp_the_query->query_vars['old_format'];
+		// 	$query['paged'] = ($wp_the_query->query_vars['old_paged'] > 0) ? $wp_the_query->query_vars['old_paged'] : 1 ;
+		// 	$query['orderby'] = 'date';
+		// 	$paged = $query['paged'];
+		// //}
 	
 
 
@@ -497,8 +497,11 @@ class WidgetPress_Controller_Widgets {
 	*/
 	public function display_dropzone($slug  = null){
 
-		
-		$post = new WP_Query(array('name'=>$slug, 'post_type'=>'section'));
+		if(is_numeric($slug)){
+			$post = get_post($slug);
+		} else {
+			$post = new WP_Query(array('name'=>$slug, 'post_type'=>'section'));
+		}
 		//$post = get_dropzone_post($term, 'section');
 		//echo "<pre>";print_r($post);echo "</pre>";
 		
@@ -509,7 +512,6 @@ class WidgetPress_Controller_Widgets {
 		//$dropzones = new WP_Query(array('pagename'=>$slug));
 		//echo "<pre>";print_r($dropzones);echo "</pre>";
 		//echo apply_filters('widgetpress_before_dropzones_container', '<section class="dropzones span12">', $dropzone);
-
 
 		foreach($dropzones as $dropzone){
 			//echo apply_filters('widgetpress_before_dropzone', $before_dropzone, $dropzone);
@@ -543,8 +545,9 @@ class WidgetPress_Controller_Widgets {
 
 			//echo apply_filters('widgetpress_inner_wrapper_after', "</section>", $dropzone);
             //echo  apply_filters('widgetpress_after_dropzone', "</section>", $dropzone);
+
 		}
-		
+		return $dropzones;
 		//echo apply_filters('widgetpress_after_dropzones_container', "</section>", $dropzone);
 	}
 
