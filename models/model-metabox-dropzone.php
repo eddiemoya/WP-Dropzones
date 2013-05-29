@@ -20,7 +20,7 @@ class WPDZ_Metabox_Sidebars extends WPDZ_Metabox {
     /**
      * @var string|array 
      */
-    var $post_types = array('page', 'section');
+    var $post_types = array('page', 'section', 'category', 'skcategory');
     
     /**
      * @var string 
