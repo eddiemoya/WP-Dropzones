@@ -36,13 +36,16 @@ class WidgetPress_Model_Dropzone {
 
 
 		if(is_null($post)){
-			$this->post = $this->create_dropzone($this->term->term_id, $type);
+			$this->create_dropzone($this->term->term_id, $type);
+			//$this->post = $this->create_dropzone($this->term->term_id, $type);
 		} else {
 			$gpost = $GLOBALS['post'];
 			unset($GLOBALS['post']);
 			$this->post = (is_object($post)) ? $post : get_post($post);
 			$GLOBALS['post'] = $gpost;
 		}
+
+		//print_pre($this->post);
 
 		//echo "<pre>";print_r($post);echo "</pre>";
 		if(!empty($this->post)){
@@ -98,6 +101,8 @@ class WidgetPress_Model_Dropzone {
 			'tax_input'		=> array( $this->type => array($term_id) )
 		));
 
+		
+
 		return get_post($post_id);
 
 	}
@@ -119,10 +124,11 @@ class WidgetPress_Model_Dropzone {
 	 * 
 	 */
 	private function get_dropzone_meta(){
-		$meta = get_post_meta($this->post->ID, '', false);
+		$meta = get_post_custom($this->post->ID);
 		unset($meta['_edit_lock']);
 		unset($meta['_edit_last']);
 
+		//print_pre($meta);
 		foreach($meta as &$m){
 			if(is_array($m)){
 				$m = $m[0];
