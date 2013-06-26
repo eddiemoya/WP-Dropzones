@@ -174,6 +174,7 @@ class WidgetPress_Controller_Dropzones {
 			'section',
 			'layout', 
 			'dropzone',
+			'skcategory'
 		));
 
 		register_taxonomy('layout',$post_types, $args);
@@ -213,7 +214,8 @@ class WidgetPress_Controller_Dropzones {
 			'section',
 			'dropzone',
 			'widget',
-			'category'
+			'category',
+			'skcategory'
 		));
 
 		register_taxonomy('dropzone',$post_types, $args);
