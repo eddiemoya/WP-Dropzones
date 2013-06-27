@@ -426,18 +426,18 @@ class WidgetPress_Controller_Widgets {
 
 		// unset($wp_the_query->query['meta_key']);
 		//query_posts($query);
-		$wp_the_query = new WP_Query($query);
+		//$wp_the_query = new WP_Query($query);
 		//echo "<pre>";print_r($wp_the_query);echo "</pre>";
 
 
 		
 
 
-		//if(empty($post_id)){
+		if(empty($post_id)){
 			$dropzones = WidgetPress_Controller_Dropzones::get_dropzones('dropzone');
-		//} else {
-			//$dropzones = WidgetPress_Cont
-		//}
+		} else {
+			$dropzones = WidgetPress_Controller_Dropzones::get_dropzones('dropzone', $post_id);
+		}
 		echo apply_filters('widgetpress_before_dropzones_container', '<section class="dropzones span12">', $dropzones);
 
 		if(!empty($dropzones)){
