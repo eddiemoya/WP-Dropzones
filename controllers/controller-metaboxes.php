@@ -38,7 +38,9 @@ class WPDZ_Controller_Metaboxes {
      */
     private function create_metaboxes() {
         
-        self::$metaboxes['settings']    = new WPDZ_Metabox_Settings();
+        // if(is_home()){
+        //     self::$metaboxes['settings']    = new WPDZ_Metabox_Settings();
+        // }
         self::$metaboxes['layout']      = new WPDZ_Metabox_Sidebars();
         self::$metaboxes['posttypes']      = new WPDZ_Metabox_Post_Types();
         //self::$metaboxes['dropzones']   = new WPDZ_Metabox_Dropzones();
@@ -99,14 +101,14 @@ class WPDZ_Controller_Metaboxes {
                 $metabox->callback_args = array($metabox->callback_args);
             }
             foreach ((array) $metabox->post_types as $index => $post_type) {
-                if($metabox->is_enabled()){
+              //  if($metabox->is_enabled()){
                     if(is_array($metabox->priority)){
                         $priority = $metabox->priority[$index];
                     } else {
                         $priority = $metabox->priority;
                     }
                     add_meta_box($metabox->id, $metabox->title, array($metabox, 'view'), $post_type, $metabox->context, $priority, $metabox->callback_args);
-                }
+               // }
             }
         }
     }
