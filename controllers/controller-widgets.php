@@ -411,8 +411,13 @@ class WidgetPress_Controller_Widgets {
 		// unset($wp_the_query->query['meta_key']);
 		// $wp_the_query->query($wp_the_query->query);
 		// echo "<pre>";print_r($wp_the_query);echo "</pre>";
-		$sf_filter = $wp_query->query_vars['sf_filter'];
-		if(!isset($sf_filter)){
+
+         if( 
+         	isset($wp_the_query->query_vars['old_post_type']) 
+         || isset($wp_the_query->query_vars['old_category']) 
+         || isset($wp_the_query->query_vars['old_format']) 
+         || isset($wp_the_query->query_vars['old_skcategory']) ){
+
 			$query['post_type'] = $wp_the_query->query_vars['old_post_type'];
 			$query['category_name'] = $wp_the_query->query_vars['old_category'];
 			$query['skcategory'] = $wp_the_query->query_vars['old_skcategory'];
