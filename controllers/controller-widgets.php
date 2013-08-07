@@ -411,8 +411,8 @@ class WidgetPress_Controller_Widgets {
 		// unset($wp_the_query->query['meta_key']);
 		// $wp_the_query->query($wp_the_query->query);
 		// echo "<pre>";print_r($wp_the_query);echo "</pre>";
-
-		//if(!is_admin()){
+		$sf_filter = isset($wp_query->query_vars['sf_filter']);
+		if(!isset($sf_filter)){
 			$query['post_type'] = $wp_the_query->query_vars['old_post_type'];
 			$query['category_name'] = $wp_the_query->query_vars['old_category'];
 			$query['skcategory'] = $wp_the_query->query_vars['old_skcategory'];
@@ -420,7 +420,7 @@ class WidgetPress_Controller_Widgets {
 			$query['paged'] = ($wp_the_query->query_vars['old_paged'] > 0) ? $wp_the_query->query_vars['old_paged'] : 1 ;
 			$query['orderby'] = 'date';
 			$paged = $query['paged'];
-		//}
+		}
 	
 
 
