@@ -79,6 +79,9 @@ class WidgetPress_Controller_Dropzones {
 	 */
 	public function get_dropzones($type = 'dropzone', $post_id = null){
 
+		delete_option("dropzone_children");
+		wp_cache_flush();
+		
 		$terms =  get_the_terms( self::post_id($post_id), $type );
 		$terms = ($type == 'layout') ? array($terms[0]) : $terms;
 
