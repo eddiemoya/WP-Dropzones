@@ -55,7 +55,7 @@ class WPDZ_Controller_Metaboxes {
      * @return void
      */
     private function add_actions() {
-        add_action('admin_print_scripts-post.php',  array(__CLASS__, 'enqueue'));
+        add_action('admin_enqueue_scripts-post.php',  array(__CLASS__, 'enqueue'));
         add_action('add_meta_boxes',                array(__CLASS__, 'add_meta_boxes'));
         add_action('save_post',                     array(__CLASS__, 'save_metaboxes'));
         add_action('wp_ajax_refresh-metabox',       array(__CLASS__, 'refresh_metabox'));
