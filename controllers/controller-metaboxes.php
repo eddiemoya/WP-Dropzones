@@ -55,23 +55,25 @@ class WPDZ_Controller_Metaboxes {
      * @return void
      */
     private function add_actions() {
-        add_action('admin_enqueue_scripts-post.php',  array(__CLASS__, 'enqueue'));
+        add_action('admin_enqueue_styles-post.php',  array(__CLASS__, 'enqueue_styles'));
+        add_action('admin_enqueue_scripts',  array(__CLASS__, 'enqueue_scripts'));
         add_action('add_meta_boxes',                array(__CLASS__, 'add_meta_boxes'));
         add_action('save_post',                     array(__CLASS__, 'save_metaboxes'));
         add_action('wp_ajax_refresh-metabox',       array(__CLASS__, 'refresh_metabox'));
     }
 
     /**
-     * Enqueue all necessary styles and scripts. 
+     * Enqueue all necessary scripts. 
      * 
      * I only called on post editor paged, due to the dynamically generated hook used.
      * 
      * @author Eddie Moya
      * @return void
      */
-    public function enqueue() {
-        wp_register_style('widgets_metabox_styles', plugins_url('assets/css/widgets-metabox.css', dirname(__FILE__)));
-        wp_enqueue_style('widgets_metabox_styles');
+    public function enqueue_scripts($hook) {
+
+        if( 'post.php' != $hook )
+            return;
 
         wp_register_script('save_widgets_metabox', plugins_url('assets/js/dropzones.js', dirname(__FILE__)), array(), '1.1');
         wp_enqueue_script('save_widgets_metabox');
@@ -79,6 +81,23 @@ class WPDZ_Controller_Metaboxes {
         //Better if I moved this to the sidebar controller, but meh.
         wp_enqueue_script('jquery');
         wp_enqueue_script('jquery-ui-droppable');
+    }
+
+        /**
+     * Enqueue all necessary styles. 
+     * 
+     * I only called on post editor paged, due to the dynamically generated hook used.
+     * 
+     * @author Eddie Moya
+     * @return void
+     */
+    public function enqueue_styles($hook) {
+
+        if( 'post.php' != $hook )
+            return;
+
+        wp_register_style('widgets_metabox_styles', plugins_url('assets/css/widgets-metabox.css', dirname(__FILE__)));
+        wp_enqueue_style('widgets_metabox_styles');
     }
 
     /**
